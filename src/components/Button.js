@@ -2,7 +2,7 @@ import React from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native'
 
 const Button = ({ name, onPress, color, pic }) => {
-    console.log(color, "colorcolorcolor");
+    // console.log(color, "colorcolorcolor");
 
 
     return (
@@ -27,6 +27,7 @@ const Style = StyleSheet.create({
     textColor: {
         color: "white",
         fontSize: 18
+
     }
 })
 export default Button
