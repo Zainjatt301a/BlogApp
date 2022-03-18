@@ -45,7 +45,7 @@ const Comments = () => {
         },
     ]
     return (
-        <KeyboardAvoidingView style={{ flex: 1 }} behavior='padding'>
+        <View style={{ flex: 1 }}>
 
             <ScrollView style={Styles.container}>
                 {
@@ -71,7 +71,7 @@ const Comments = () => {
                 </TouchableOpacity>
             </View>
 
-        </KeyboardAvoidingView>
+        </View>
     )
 }
 

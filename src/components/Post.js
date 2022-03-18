@@ -53,7 +53,7 @@ const Styles = StyleSheet.create({
         borderRadius: 10,
         borderWidth: 1,
         marginHorizontal: 10,
-        marginTop: vh * 0.03
+        marginTop: vh * 0.03,
     }
 })
 export default Post

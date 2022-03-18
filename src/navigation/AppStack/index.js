@@ -73,7 +73,7 @@ function AppStack() {
     }
     return (
 
-        <Tab.Navigator initialRouteName='homeStacks'>
+        <Tab.Navigator initialRouteName='homeStacks' screenOptions={{ tabBarHideOnKeyboard: true }}>
             <Tab.Screen name="homeStacks" component={HomeStacks}
                 options={{
                     headerShown: false,

@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { Text, View, StyleSheet, Image } from "react-native"
 import { Button, TextInputs, ImagePickers } from "../../components";
 import facebookLogo from '../../assets/facebookLogo.png'
+import { registerUser } from "../../services/Firebase";
+import { vh } from "../../constants";
+
 const Register = ({ navigation }) => {
     const [inputs, setInputs] = useState({
         name: "",
@@ -9,7 +12,7 @@ const Register = ({ navigation }) => {
         password: ""
     })
 
-    console.log(inputs.name, inputs.email, inputs.password, "States");
+    // console.log(inputs.name, inputs.email, inputs.password, "States");
 
     const onChangeHandler = (name, value) => {
         setInputs({
@@ -18,14 +21,18 @@ const Register = ({ navigation }) => {
         })
     }
 
+    const signupUser = () => {
+        registerUser(inputs.name, inputs.email, inputs.password)
+    }
 
     return (
 
         <View style={Style.container}>
-            <View style={{ flex: 0.25 }}>
-                <Text style={{ fontSize: 30 }}>Register</Text>
+            <View style={{ flex: 0.35 }}>
+                <Text style={{ fontSize: 30 }}>Welcome to Blog App</Text>
+                <Text style={{ fontSize: 20, marginTop: vh * 0.01, fontWeight: "300" }}>Please Register</Text>
 
-                <ImagePickers title="Upload Profile" />
+                <ImagePickers width={100} height={100} borderRadius={100} title="Upload Profile" />
 
             </View>
             <View style={{ flex: 0.28 }}>
@@ -48,10 +55,10 @@ const Register = ({ navigation }) => {
             </View>
             <View style={{ flex: 0.33 }}>
                 <View style={{ marginTop: 20 }}>
-                    <Button onPress={() => alert("Sign Up")} name="Sign Up" color="black" />
+                    <Button onPress={signupUser} name="Sign Up" color="black" />
                 </View>
 
-                <Text onPress={() => navigation.navigate("login")} style={{ textDecorationLine: "underline", textAlign: "center", marginTop: 20 }}>Login</Text>
+                <Text onPress={() => navigation.navigate("login")} style={{ textDecorationLine: "underline", textAlign: "center", marginTop: vh * 0.03 }}>Already have an account ? Login</Text>
             </View>
         </View >
     )

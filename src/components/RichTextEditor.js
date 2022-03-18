@@ -21,7 +21,7 @@ const RichTextEditor = () => {
                         ref={richText}
                         onChange={(text) => setArticle(text)}
                         placeholder="Write Something"
-                        containerStyle={{ backgroundColor: "red" }}
+
                     />
                 </KeyboardAvoidingView>
 

@@ -16,7 +16,7 @@ const Home = ({ navigation }) => {
 
     return (
 
-        <View style={Styles.container} >
+        <ScrollView contentContainerStyle={{ flex: 1 }} style={Styles.container} >
             <View style={{ flex: 0.18, marginTop: 20 }}>
                 <Text style={{ fontSize: 30 }}>Home</Text>
             </View>
@@ -31,7 +31,7 @@ const Home = ({ navigation }) => {
                     <Text style={{ color: "white" }}>Create a Blog</Text>
                 </TouchableOpacity>
             </View>
-        </View >
+        </ScrollView >
 
     )
 }

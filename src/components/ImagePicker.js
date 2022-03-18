@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Image, View, Platform, StyleSheet } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import { vh } from '../constants';
 
 export default function ImagePickers({ width, borderRadius, height, title }) {
     const [image, setImage] = useState(null);
@@ -24,7 +25,8 @@ export default function ImagePickers({ width, borderRadius, height, title }) {
     return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             <Button title={title} onPress={pickImage} />
-            {image && <Image source={{ uri: image }} style={{ ...Styles.ImageProps, width: width, borderRadius: borderRadius, height: height }} />}
+            {image ? <Image source={{ uri: image }} style={{ ...Styles.ImageProps, width: width, borderRadius: borderRadius, height: height }} /> :
+                <Image source={{ uri: "https://cdn5.vectorstock.com/i/1000x1000/50/29/user-icon-male-person-symbol-profile-avatar-vector-20715029.jpg" }} style={{ ...Styles.ImageProps, width: width, borderRadius: borderRadius, height: height }} />}
         </View>
     );
 }
