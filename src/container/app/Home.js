@@ -15,24 +15,33 @@ const Home = ({ navigation }) => {
     }
 
     return (
-
-        <ScrollView contentContainerStyle={{ flex: 1 }} style={Styles.container} >
-            <View style={{ flex: 0.18, marginTop: 20 }}>
+        <>
+            <View style={{ flex: 0.10, marginTop: vh * 0.03, marginHorizontal: 5 }}>
                 <Text style={{ fontSize: 30 }}>Home</Text>
             </View>
+            <ScrollView style={Styles.container} >
 
-            <ScrollView contentContainerStyle={{ flex: 0.45 }}>
-                <Post onPressForComment={() => navigation.navigate("Comments")} onPressForBlogDetail={openBlogDetail} />
-            </ScrollView>
-            <View style={{ alignItems: "flex-end", marginRight: vw * 0.03, position: "relative", bottom: 50 }}>
+
+                <View>
+                    <Post onPressForComment={() => navigation.navigate("Comments")} onPressForBlogDetail={openBlogDetail}
+                        title="Ten Things You Didn't Know About Blockchain."
+                        pic="https://phantom-marca.unidadeditorial.es/7c4ccd41cb946352fe6e15a6c32773a1/crop/0x0/2041x1150/resize/1320/f/jpg/assets/multimedia/imagenes/2022/01/07/16415655339687.jpg"
+                    />
+                    <Post onPressForComment={() => navigation.navigate("Comments")} onPressForBlogDetail={openBlogDetail}
+                        title="The 15 Secrets You Will Never Know About Iphone."
+                        pic="https://cdn.vox-cdn.com/thumbor/OCYUEEc5odYKWErorN0WNvLa9po=/0x0:2032x1355/1200x800/filters:focal(854x516:1178x840)/cdn.vox-cdn.com/uploads/chorus_image/image/70617253/akrales_210917_4760_0175.0.jpg"
+                    />
+                </View>
+
+            </ScrollView >
+            <View style={{ alignItems: "flex-end", marginRight: vw * 0.03, position: "absolute", bottom: 30, right: 0, }}>
                 <TouchableOpacity
                     onPress={openCreateBlog}
                     style={{ backgroundColor: "black", width: 100, height: 50, justifyContent: "center", alignItems: "center", borderRadius: 10 }}>
                     <Text style={{ color: "white" }}>Create a Blog</Text>
                 </TouchableOpacity>
             </View>
-        </ScrollView >
-
+        </>
     )
 }
 

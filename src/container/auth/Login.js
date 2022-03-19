@@ -32,9 +32,9 @@ const Login = ({ navigation }) => {
     return (
 
         <View style={Style.container}>
-            <View style={{ flex: 0.12 }}>
+            <View style={{ flex: 0.12, alignItems: "center" }}>
                 <Text style={{ fontSize: 30 }}>Welcome Back</Text>
-                <Text style={{ fontSize: 20, marginTop: vh * 0.01, fontWeight: "300" }}>Please Sign In to Continue</Text>
+                <Text style={{ fontSize: 15, marginTop: vh * 0.01 }}>Please Sign In to Continue</Text>
             </View>
             <View style={{ flex: 0.22 }}>
                 <TextInputs

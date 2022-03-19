@@ -3,15 +3,20 @@ import { NavigationContainer } from '@react-navigation/native';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import AuthStack from './AuthStack';
 import AppStack from './AppStack';
-import { ActivityIndicator } from 'react-native';
+import { ActivityIndicator, Image } from 'react-native';
+import { headerColor, vh, vw } from '../constants';
+import { View } from 'react-native';
 
 export default function Navigation() {
     const [component, setComponent] =
         useState(
-            <ActivityIndicator color="blue" size={'large'}
+            <ActivityIndicator color={headerColor} size={'small'}
                 style={{ flex: 1 }}
                 animating={true}
             />
+            // <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }} >
+            //     <Image source={{ uri: "https://stackideas.cachefly.net/images/apps/2429/logo.png" }} style={{ width: vw * 1, height: vh * 0.57 }} />
+            // </View>
         )
 
     const auth = getAuth();

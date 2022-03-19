@@ -3,6 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { Home, Profile, BlogDetail, Comments, CreateBlog, Favorite } from '../../container';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { AntDesign } from '@expo/vector-icons';
+import { headerColor } from '../../constants';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -15,7 +16,14 @@ function AppStack() {
                     name="Home"
                     component={Home}
                     options={{
-                        headerShown: true
+                        headerShown: true,
+                        title: "Home",
+                        headerStyle: {
+                            backgroundColor: headerColor,
+                        },
+                        headerTitleStyle: {
+                            color: "white"
+                        }
                     }}
                 />
 
@@ -24,14 +32,27 @@ function AppStack() {
                     component={BlogDetail}
                     options={{
                         headerShown: true,
-                        title: "Blog Detail"
+                        title: "Blog Detail",
+                        headerStyle: {
+                            backgroundColor: headerColor,
+                        },
+                        headerTitleStyle: {
+                            color: "white"
+                        }
                     }}
                 />
                 <Stack.Screen
                     name="Comments"
                     component={Comments}
                     options={{
-                        headerShown: true
+                        headerShown: true,
+                        title: "Comments",
+                        headerStyle: {
+                            backgroundColor: headerColor,
+                        },
+                        headerTitleStyle: {
+                            color: "white"
+                        }
                     }}
                 />
                 <Stack.Screen
@@ -39,10 +60,14 @@ function AppStack() {
                     name="CreateBlog"
                     component={CreateBlog}
                     options={{
-
                         headerShown: true,
-                        title: "Create Blog"
-
+                        title: "Create Blog",
+                        headerStyle: {
+                            backgroundColor: headerColor,
+                        },
+                        headerTitleStyle: {
+                            color: "white"
+                        }
                     }}
 
                 />
@@ -58,14 +83,28 @@ function AppStack() {
                     name="Profile"
                     component={Profile}
                     options={{
-                        headerShown: true
+                        headerShown: true,
+                        title: "Profile",
+                        headerStyle: {
+                            backgroundColor: headerColor,
+                        },
+                        headerTitleStyle: {
+                            color: "white"
+                        }
                     }}
                 />
                 <Stack.Screen
                     name="Favorite"
                     component={Favorite}
                     options={{
-                        headerShown: true
+                        headerShown: true,
+                        title: "Favorite",
+                        headerStyle: {
+                            backgroundColor: headerColor,
+                        },
+                        headerTitleStyle: {
+                            color: "white"
+                        }
                     }}
                 />
             </Stack.Navigator>
@@ -73,7 +112,15 @@ function AppStack() {
     }
     return (
 
-        <Tab.Navigator initialRouteName='homeStacks' screenOptions={{ tabBarHideOnKeyboard: true }}>
+        <Tab.Navigator
+            initialRouteName='homeStacks'
+            screenOptions={{
+                tabBarHideOnKeyboard: true,
+                tabBarActiveBackgroundColor: headerColor,
+                tabBarActiveTintColor: "white"
+            }}
+
+        >
             <Tab.Screen name="homeStacks" component={HomeStacks}
                 options={{
                     headerShown: false,

@@ -28,7 +28,7 @@ const Register = ({ navigation }) => {
     return (
 
         <View style={Style.container}>
-            <View style={{ flex: 0.35 }}>
+            <View style={{ flex: 0.35, alignItems: "center" }}>
                 <Text style={{ fontSize: 30 }}>Welcome to Blog App</Text>
                 <Text style={{ fontSize: 20, marginTop: vh * 0.01, fontWeight: "300" }}>Please Register</Text>
 

@@ -10,26 +10,34 @@ const Favorite = () => {
         setIsFavorite(!isFavorite)
     }
     return (
-        <ScrollView style={Styles.container}>
-            <View style={{ flex: 0.20 }}>
+        <>
+            <View style={{ flex: 0.10, marginTop: vh * 0.02 }}>
                 <Text style={{ fontSize: 30 }}> Favorite</Text>
             </View>
-            <View style={{ flex: 0.80, marginTop: vh * 0.03 }}>
-                <View style={{ borderWidth: 1, marginHorizontal: 10, flexDirection: "row", borderRadius: 10 }}>
-                    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-                        <Image source={{ uri: "https://cdn.pixabay.com/photo/2021/09/12/07/58/banner-6617550__340.png" }} style={{ width: 300, height: 200 }} />
-                    </View>
-                    <TouchableOpacity onPress={favoritePost}>
-                        {isFavorite ?
-                            <AntDesign name="heart" style={{ marginRight: vw * 0.02, marginTop: vh * 0.02 }} size={24} color="red" />
-                            :
-                            <AntDesign name="hearto" style={{ marginRight: vw * 0.02, marginTop: vh * 0.02 }} color="black" size={24} />
+            <ScrollView style={Styles.container}>
 
-                        }
-                    </TouchableOpacity>
-                </View>
-            </View>
-        </ScrollView>
+                <TouchableOpacity style={{ borderRadius: 10, flexDirection: "row", borderWidth: 1, marginVertical: 20, alignItems: "center" }}>
+                    <View>
+                        <Image source={{ uri: "https://phantom-marca.unidadeditorial.es/7c4ccd41cb946352fe6e15a6c32773a1/crop/0x0/2041x1150/resize/1320/f/jpg/assets/multimedia/imagenes/2022/01/07/16415655339687.jpg" }} style={{ width: vw * 0.4, height: 100, resizeMode: "cover" }} />
+                    </View>
+                    <View style={{ flex: 1, marginHorizontal: 5 }}>
+                        <TouchableOpacity onPress={favoritePost} style={{ alignItems: "flex-end" }} >
+                            {isFavorite ?
+                                <AntDesign name="heart" style={{ marginRight: vw * 0.02, marginTop: vh * 0.02 }} size={24} color="red" />
+                                :
+                                <AntDesign name="hearto" style={{ marginRight: vw * 0.02, marginTop: vh * 0.02 }} color="black" size={24} />
+
+                            }
+                        </TouchableOpacity>
+                        <View style={{ flex: 1 }}>
+                            <Text style={{ fontSize: 18, fontWeight: "600" }}>Ten Things You Didn't Know About Blockchain.</Text>
+                        </View>
+
+                    </View>
+                </TouchableOpacity>
+
+            </ScrollView >
+        </>
     )
 }
 
