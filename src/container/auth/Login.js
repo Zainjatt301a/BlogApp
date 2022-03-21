@@ -1,13 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Text, View, StyleSheet, ActivityIndicator } from "react-native"
 import { Button, TextInputs } from "../../components";
 import facebookLogo from '../../assets/facebookLogo.png'
 import AppStack from "../../navigation/AppStack";
 import AuthStack from "../../navigation/AuthStack";
-import { loginUser, loginWithFacebook } from "../../services/Firebase";
+import { loginUser } from "../../services/Firebase";
 import { EvilIcons } from '@expo/vector-icons';
 import { vh } from "../../constants";
+import * as Facebook from 'expo-facebook';
+import { FacebookAuthProvider, signInWithCredential } from "firebase/auth"
+
 const Login = ({ navigation }) => {
+
+
+    const Provider = FacebookAuthProvider
+    const facebookLogIn = async () => {
+
+    }
 
     const [loader, setLoader] = useState()
 
@@ -26,8 +35,45 @@ const Login = ({ navigation }) => {
     const signinUser = async () => {
         await loginUser(inputs.userName, inputs.password)
     }
+
+    let AppId = "652483592482813"
+    let permissions = ['public_profile', 'email']
+
+
     const loginUserWithFb = async () => {
-        await loginWithFacebook()
+        try {
+            await Facebook.initializeAsync({
+                appId: '652483592482813',
+            });
+
+            let result = await Facebook.logInWithReadPermissionsAsync({ permissions })
+            let response = FacebookAuthProvider.credential(result.token)
+            try {
+                let rrrr = await signInWithCredential(response)
+
+            } catch (error) {
+                console.log(error, "ERRRRRRRRRRRRRRR");
+            }
+
+            console.log(result, response, "RRRRRRRRRRRRRRRRRR");
+            //    .then(res => {
+            //         if (res.type == "success") {
+            //             console.log(res.token, "TTT");
+            //             const credential = FacebookAuthProvider.credential(res.token)
+            //             console.log(credential, "credentialcredentialcredential");
+            //             return signInWithCredential(credential).then(res => {
+            //                 console.log(res, "RRRS_CCC");
+            //             })
+            //                 .catch(err => {
+            //                     console.log(err, "ER_CRRRRRRR");
+            //                 })
+            //         }
+            //     })
+
+        }
+        catch (err) {
+            console.log(err, "errrr");
+        }
     }
     return (
 

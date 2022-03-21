@@ -34,13 +34,6 @@ const Home = ({ navigation }) => {
                 </View>
 
             </ScrollView >
-            <View style={{ alignItems: "flex-end", marginRight: vw * 0.03, position: "absolute", bottom: 30, right: 0, }}>
-                <TouchableOpacity
-                    onPress={openCreateBlog}
-                    style={{ backgroundColor: "black", width: 100, height: 50, justifyContent: "center", alignItems: "center", borderRadius: 10 }}>
-                    <Text style={{ color: "white" }}>Create a Blog</Text>
-                </TouchableOpacity>
-            </View>
         </>
     )
 }

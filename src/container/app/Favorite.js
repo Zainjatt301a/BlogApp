@@ -12,7 +12,7 @@ const Favorite = () => {
     return (
         <>
             <View style={{ flex: 0.10, marginTop: vh * 0.02 }}>
-                <Text style={{ fontSize: 30 }}> Favorite</Text>
+                <Text style={{ fontSize: 30 }}> Favorite Blogs</Text>
             </View>
             <ScrollView style={Styles.container}>
 

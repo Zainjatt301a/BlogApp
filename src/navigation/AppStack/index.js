@@ -2,7 +2,7 @@ import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Home, Profile, BlogDetail, Comments, CreateBlog, Favorite } from '../../container';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { headerColor } from '../../constants';
 
 const Stack = createStackNavigator();
@@ -55,7 +55,7 @@ function AppStack() {
                         }
                     }}
                 />
-                <Stack.Screen
+                {/* <Stack.Screen
 
                     name="CreateBlog"
                     component={CreateBlog}
@@ -70,7 +70,7 @@ function AppStack() {
                         }
                     }}
 
-                />
+                /> */}
 
             </Stack.Navigator>
         )
@@ -93,7 +93,7 @@ function AppStack() {
                         }
                     }}
                 />
-                <Stack.Screen
+                {/* <Stack.Screen
                     name="Favorite"
                     component={Favorite}
                     options={{
@@ -106,7 +106,7 @@ function AppStack() {
                             color: "white"
                         }
                     }}
-                />
+                /> */}
             </Stack.Navigator>
         )
     }
@@ -126,6 +126,34 @@ function AppStack() {
                     headerShown: false,
                     tabBarIcon: () => { return < AntDesign name="home" size={24} color="black" /> },
                     title: "Home"
+                }}
+            />
+
+            <Tab.Screen name="CreateBlog" component={CreateBlog}
+                options={{
+                    tabBarIcon: () => { return <Ionicons name="create-outline" size={24} color="black" /> },
+                    title: "Create Blog",
+                    headerShown: true,
+                    headerStyle: {
+                        backgroundColor: headerColor,
+                    },
+                    headerTitleStyle: {
+                        color: "white"
+                    }
+                }}
+            />
+
+            <Tab.Screen name="Favorite" component={Favorite}
+                options={{
+                    tabBarIcon: () => { return <MaterialIcons name="favorite-border" size={24} color="black" /> },
+                    title: "Favorite",
+                    headerShown: true,
+                    headerStyle: {
+                        backgroundColor: headerColor,
+                    },
+                    headerTitleStyle: {
+                        color: "white"
+                    }
                 }}
             />
             <Tab.Screen name="profileStacks" component={ProfileStacks}

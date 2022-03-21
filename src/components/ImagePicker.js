@@ -3,7 +3,7 @@ import { Button, Image, View, Platform, StyleSheet } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { vh } from '../constants';
 
-export default function ImagePickers({ width, borderRadius, height, title }) {
+export default function ImagePickers({ width, borderRadius, height, title, uploadImage }) {
     const [image, setImage] = useState(null);
 
     const pickImage = async () => {
@@ -19,6 +19,7 @@ export default function ImagePickers({ width, borderRadius, height, title }) {
 
         if (!result.cancelled) {
             setImage(result.uri);
+            await uploadImage(result.uri)
         }
     };
 
@@ -26,7 +27,7 @@ export default function ImagePickers({ width, borderRadius, height, title }) {
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             <Button title={title} onPress={pickImage} />
             {image ? <Image source={{ uri: image }} style={{ ...Styles.ImageProps, width: width, borderRadius: borderRadius, height: height }} /> :
-                <Image source={{ uri: "https://cdn5.vectorstock.com/i/1000x1000/50/29/user-icon-male-person-symbol-profile-avatar-vector-20715029.jpg" }} style={{ ...Styles.ImageProps, width: width, borderRadius: borderRadius, height: height }} />}
+                <Image source={{ uri: "https://phantom-marca.unidadeditorial.es/7c4ccd41cb946352fe6e15a6c32773a1/crop/0x0/2041x1150/resize/1320/f/jpg/assets/multimedia/imagenes/2022/01/07/16415655339687.jpg" }} style={{ ...Styles.ImageProps, width: width, borderRadius: borderRadius, height: height }} />}
         </View>
     );
 }

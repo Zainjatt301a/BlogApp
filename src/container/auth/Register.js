@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Text, View, StyleSheet, Image } from "react-native"
 import { Button, TextInputs, ImagePickers } from "../../components";
 import facebookLogo from '../../assets/facebookLogo.png'
-import { registerUser } from "../../services/Firebase";
+import { registerUser, uploadImageToStorage } from "../../services/Firebase";
 import { vh } from "../../constants";
 
 const Register = ({ navigation }) => {
@@ -21,10 +21,16 @@ const Register = ({ navigation }) => {
         })
     }
 
-    const signupUser = () => {
-        registerUser(inputs.name, inputs.email, inputs.password)
+    const signupUser = async () => {
+        const temp = await registerUser(inputs.name, inputs.email, inputs.password)
+        // await uploadImage()
     }
 
+    const uploadImage = async (image) => {
+        console.log(image, "Image");
+        const urls = await uploadImageToStorage(image)
+        console.log(urls, "Urls");
+    }
     return (
 
         <View style={Style.container}>
@@ -32,7 +38,7 @@ const Register = ({ navigation }) => {
                 <Text style={{ fontSize: 30 }}>Welcome to Blog App</Text>
                 <Text style={{ fontSize: 20, marginTop: vh * 0.01, fontWeight: "300" }}>Please Register</Text>
 
-                <ImagePickers width={100} height={100} borderRadius={100} title="Upload Profile" />
+                <ImagePickers uploadImage={uploadImage} width={100} height={100} borderRadius={100} title="Upload Profile" />
 
             </View>
             <View style={{ flex: 0.28 }}>

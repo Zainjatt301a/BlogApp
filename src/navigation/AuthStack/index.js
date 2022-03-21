@@ -16,6 +16,7 @@ function AuthStack() {
                     title: "Login",
                     headerStyle: {
                         backgroundColor: headerColor,
+
                     },
                     headerTitleStyle: {
                         color: "white"

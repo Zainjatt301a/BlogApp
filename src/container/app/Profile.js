@@ -44,7 +44,7 @@ const Profile = ({ navigation }) => {
             <TouchableOpacity style={{ flex: 0.10, justifyContent: "center", alignItems: "center" }}
                 onPress={() => navigation.navigate("Favorite")}
             >
-                <Text style={{ fontSize: 18, fontWeight: "700" }}>Favorites</Text>
+                <Text style={{ fontSize: 16, fontWeight: "500" }}> Total favorite blogs : 2</Text>
             </TouchableOpacity>
         </View>
     )

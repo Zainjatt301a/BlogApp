@@ -2,6 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, FacebookAuthProvider, signInWithPopup } from "firebase/auth";
 import { getDatabase, ref, set } from "firebase/database";
+import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from "firebase/storage"
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -20,27 +21,26 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 const provider = new FacebookAuthProvider();
 const db = getDatabase(app);
+const storage = getStorage();
 
-const registerUser = (name, email, password) => {
-    console.log(email, password, name, "Register");
-    createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-            const user = userCredential.user.uid
-            alert("Successfully Registered")
-            set(ref(db, 'users/' + user), {
-                name,
-                email,
-                password
-            });
-        })
-        .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            // ..
-            alert(errorMessage)
-            console.log("error", errorMessage, errorCode)
-        })
+const registerUser = async (name, email, password) => {
+    // console.log(email, password, name, "Register");
+    try {
+        const user = await createUserWithEmailAndPassword(auth, email, password)
+        alert("Successfully Registered")
+        await set(ref(db, 'users/' + user), {
+            name,
+            email,
+            password
+        });
 
+    } catch (error) {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // ..
+        alert(errorMessage)
+        console.log("error", errorMessage, errorCode)
+    }
 
 }
 
@@ -91,8 +91,27 @@ const loginWithFacebook = async () => {
     // });
 }
 
+async function uploadImageToStorage(file) {
+    console.log(file, "File");
+    try {
+        const storageRef = sRef(storage, `registerImages/${file}`);
+        console.log(storageRef.fullPath, "Storage Ref");
+        const response = await uploadBytes(storageRef, file)
+
+        const url = await getDownloadURL(response)
+        // console.log(storageRef, "Response");
+
+        console.log(url, "Respopnse");
+        // return await getDownloadURL(response.ref)
+        return url
+    } catch (error) {
+        console.log(error.message, "ERORRR");
+    }
+}
+
 export {
     registerUser,
     loginUser,
-    loginWithFacebook
+    loginWithFacebook,
+    uploadImageToStorage,
 }
