@@ -4,51 +4,58 @@ import firebase from 'firebase'
 
 const Comments = ({ route }) => {
     const [userDetails, setuserDetails] = useState({})
+    const [commentText, setCommentText] = useState("")
+    // console.log(commentText, "Commment Text");
 
     const { firebaseKey, data } = route.params
-    console.log(firebaseKey, data, 'route')
-    const commentItems = [
-        {
-            profile: "https://cdn5.vectorstock.com/i/1000x1000/50/29/user-icon-male-person-symbol-profile-avatar-vector-20715029.jpg",
-            comment: "Very Nice",
-            time: new Date().toLocaleTimeString()
-        },
-        {
-            profile: "https://cdn5.vectorstock.com/i/1000x1000/50/29/user-icon-male-person-symbol-profile-avatar-vector-20715029.jpg",
-            comment: "Wow",
-            time: new Date().toLocaleTimeString()
-        },
-        {
-            profile: "https://cdn5.vectorstock.com/i/1000x1000/50/29/user-icon-male-person-symbol-profile-avatar-vector-20715029.jpg",
-            comment: "amazing",
-            time: new Date().toLocaleTimeString()
-        },
-        {
-            profile: "https://cdn5.vectorstock.com/i/1000x1000/50/29/user-icon-male-person-symbol-profile-avatar-vector-20715029.jpg",
-            comment: "test",
-            time: new Date().toLocaleTimeString()
-        },
-        {
-            profile: "https://cdn5.vectorstock.com/i/1000x1000/50/29/user-icon-male-person-symbol-profile-avatar-vector-20715029.jpg",
-            comment: "hello",
-            time: new Date().toLocaleTimeString()
-        },
-        {
-            profile: "https://cdn5.vectorstock.com/i/1000x1000/50/29/user-icon-male-person-symbol-profile-avatar-vector-20715029.jpg",
-            comment: "new",
-            time: new Date().toLocaleTimeString()
-        },
-        {
-            profile: "https://cdn5.vectorstock.com/i/1000x1000/50/29/user-icon-male-person-symbol-profile-avatar-vector-20715029.jpg",
-            comment: "Outstanding",
-            time: new Date().toLocaleTimeString()
-        },
-        {
-            profile: "https://cdn5.vectorstock.com/i/1000x1000/50/29/user-icon-male-person-symbol-profile-avatar-vector-20715029.jpg",
-            comment: "nice one",
-            time: new Date().toLocaleTimeString()
-        },
-    ]
+    // setCommentDetails()
+    console.log(route.params.data.comment, "Comment");
+
+    // console.log(firebaseKey, data, 'route')
+    // console.log(route.params.data.comment, "Route");
+
+    // const commentItems = [
+    //     {
+    //         profile: "https://cdn5.vectorstock.com/i/1000x1000/50/29/user-icon-male-person-symbol-profile-avatar-vector-20715029.jpg",
+    //         comment: "Very Nice",
+    //         time: new Date().toLocaleTimeString()
+    //     },
+    //     {
+    //         profile: "https://cdn5.vectorstock.com/i/1000x1000/50/29/user-icon-male-person-symbol-profile-avatar-vector-20715029.jpg",
+    //         comment: "Wow",
+    //         time: new Date().toLocaleTimeString()
+    //     },
+    //     {
+    //         profile: "https://cdn5.vectorstock.com/i/1000x1000/50/29/user-icon-male-person-symbol-profile-avatar-vector-20715029.jpg",
+    //         comment: "amazing",
+    //         time: new Date().toLocaleTimeString()
+    //     },
+    //     {
+    //         profile: "https://cdn5.vectorstock.com/i/1000x1000/50/29/user-icon-male-person-symbol-profile-avatar-vector-20715029.jpg",
+    //         comment: "test",
+    //         time: new Date().toLocaleTimeString()
+    //     },
+    //     {
+    //         profile: "https://cdn5.vectorstock.com/i/1000x1000/50/29/user-icon-male-person-symbol-profile-avatar-vector-20715029.jpg",
+    //         comment: "hello",
+    //         time: new Date().toLocaleTimeString()
+    //     },
+    //     {
+    //         profile: "https://cdn5.vectorstock.com/i/1000x1000/50/29/user-icon-male-person-symbol-profile-avatar-vector-20715029.jpg",
+    //         comment: "new",
+    //         time: new Date().toLocaleTimeString()
+    //     },
+    //     {
+    //         profile: "https://cdn5.vectorstock.com/i/1000x1000/50/29/user-icon-male-person-symbol-profile-avatar-vector-20715029.jpg",
+    //         comment: "Outstanding",
+    //         time: new Date().toLocaleTimeString()
+    //     },
+    //     {
+    //         profile: "https://cdn5.vectorstock.com/i/1000x1000/50/29/user-icon-male-person-symbol-profile-avatar-vector-20715029.jpg",
+    //         comment: "nice one",
+    //         time: new Date().toLocaleTimeString()
+    //     },
+    // ]
     useEffect(() => {
         getUserDetils()
     }, [])
@@ -66,20 +73,23 @@ const Comments = ({ route }) => {
     }
     const handleCommentSubmit = () => {
         let comments = data.comment || []
-        comments.push({ name: userDetails.name, email: userDetails.email, comment: "Testing Comment" })
+        comments.push({ name: userDetails.name, email: userDetails.email, comment: commentText })
         firebase.database().ref(`blogs/${firebaseKey}`).update({
             ...data,
             comment: comments
         }).then(res => {
-            console.log('Updated')
+            // console.log('Updated')
         })
     }
+
+    // console.log(userDetails, "UserDetails")
     return (
         <View style={{ flex: 1 }}>
 
             <ScrollView style={Styles.container}>
                 {
-                    commentItems.map((item, index) => {
+                    route.params.data.comment?.map((item, index) => {
+                        console.log(item, "Itemsss");
                         return (
                             <View style={{ marginTop: 20 }} key={index}>
                                 <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginHorizontal: 10 }}>
@@ -95,7 +105,10 @@ const Comments = ({ route }) => {
                 }
             </ScrollView>
             <View style={Styles.commentView}>
-                <TextInput enablesReturnKeyAutomatically placeholder='Comment Now' />
+                <TextInput enablesReturnKeyAutomatically placeholder='Comment Now'
+                    value={commentText}
+                    onChangeText={(text) => setCommentText(text)}
+                />
                 <TouchableOpacity onPress={handleCommentSubmit}>
                     <Text>Post</Text>
                 </TouchableOpacity>

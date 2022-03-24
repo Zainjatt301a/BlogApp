@@ -64,9 +64,10 @@ const Login = ({ navigation }) => {
 
 
     const loginUserWithFb = async () => {
+        // Facebook.logOutAsync()
         try {
             await Facebook.initializeAsync({
-                appId: '652483592482813',
+                appId: AppId
             });
 
             let result = await Facebook.logInWithReadPermissionsAsync({ permissions })
@@ -75,7 +76,12 @@ const Login = ({ navigation }) => {
                     // setLoginResult(res.data)
                     console.log("FAcebook success", res.data);
                     // console.log(id, "IDDDDDD");
-                    firebase.database().ref(`users/${res.data.id}`)
+                    // let tempId = []
+                    // let id = firebase.auth().currentUser?.uid
+                    id = res.data.id
+                    // tempId.push(id, res.data.id)
+                    // console.log(id, "Temp id");
+                    firebase.database().ref(`users/${id}`)
                         .set({
                             name: res.data.name,
                             email: res.data.email,
