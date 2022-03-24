@@ -1,18 +1,82 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, Text, StyleSheet, ScrollView, SafeAreaView } from 'react-native'
 import { AntDesign } from '@expo/vector-icons';
 import { Post } from '../../components';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { vh, vw } from '../../constants';
+import firebase from 'firebase';
 
 const Home = ({ navigation }) => {
 
-    const openCreateBlog = () => {
-        navigation.navigate("CreateBlog")
+
+    const [blogsData, setBlogsData] = useState({});
+    const openCreateBlog = (firebaseKey, data) => {
+        navigation.navigate("Comments", { firebaseKey, data })
     }
-    const openBlogDetail = () => {
-        navigation.navigate("BlogDetail")
+    const openBlogDetail = (item) => {
+        navigation.navigate("BlogDetail", { data: item })
     }
+    useEffect(() => {
+        firebase.database().ref("blogs")
+            .on("value", snapshot => {
+                let data = snapshot.val()
+
+                // snapshot.forEach(innerVal => {
+                //     innerVal.forEach(more => {
+                //         // console.log(more.val(),"moreeeeee");
+                //         tempArray.push(more.val())
+
+                //     })
+                //     // console.log(innerVal.val(),"innerVal");
+                // })
+                // console.log(tempArray,"tempArray");
+                setBlogsData(data)
+            })
+    }, [])
+
+    const [favArray, setFavArray] = useState([])
+    useEffect(() => {
+        let tempArray = [];
+        firebase.database().ref(`favourite/${firebase.auth().currentUser.uid}`)
+            .on("value", snapshot => {
+                // console.log(snapshot.val(), "snapshottttt");
+                let data = snapshot.val() ? snapshot.val() : {}
+                // snapshot.forEach(innerVal => {
+                //     innerVal.forEach(more => {
+                //         console.log(innerVal.val(), "moreeeeee");
+                //         tempArray.push(innerVal.val())
+
+                //     })
+                //     // console.log(innerVal.val(),"innerVal");
+                // })
+                // console.log(tempArray, "tempArray");
+                setFavArray(data)
+            })
+    }, [])
+
+    const [likedArray, setLikedArray] = useState([])
+    useEffect(() => {
+        let tempArray = [];
+        firebase.database().ref(`Likes/${firebase.auth().currentUser.uid}`)
+            .on("value", snapshot => {
+                // console.log(snapshot.val(), "snapshottttt");
+                let data = snapshot.val() ? snapshot.val() : {}
+                // snapshot.forEach(innerVal => {
+                //     innerVal.forEach(more => {
+                //         console.log(innerVal.val(), "moreeeeee");
+                //         tempArray.push(innerVal.val())
+
+                //     })
+                //     // console.log(innerVal.val(),"innerVal");
+                // })
+                // console.log(tempArray, "tempArray");
+                setLikedArray(data)
+            })
+    }, [])
+
+    console.log(blogsData, 'blogsData')
+    let blogsKeys = Object.keys(blogsData)
+    console.log(blogsKeys, 'blogsKeys')
 
     return (
         <>
@@ -21,17 +85,27 @@ const Home = ({ navigation }) => {
             </View>
             <ScrollView style={Styles.container} >
 
+                {blogsKeys.map((val) => {
+                    let items = blogsData[val]
+                    return (
+                        < View >
+                            <Post
+                                favArray={favArray}
+                                likedArray={likedArray}
+                                onPressForComment={() => openCreateBlog(val, items)}
+                                data={items}
+                                onPressForBlogDetail={openBlogDetail}
+                                title={items.title}
+                                pic="https://phantom-marca.unidadeditorial.es/7c4ccd41cb946352fe6e15a6c32773a1/crop/0x0/2041x1150/resize/1320/f/jpg/assets/multimedia/imagenes/2022/01/07/16415655339687.jpg"
+                                description={items.description}
+                                firebaseKey={val}
+                            />
 
-                <View>
-                    <Post onPressForComment={() => navigation.navigate("Comments")} onPressForBlogDetail={openBlogDetail}
-                        title="Ten Things You Didn't Know About Blockchain."
-                        pic="https://phantom-marca.unidadeditorial.es/7c4ccd41cb946352fe6e15a6c32773a1/crop/0x0/2041x1150/resize/1320/f/jpg/assets/multimedia/imagenes/2022/01/07/16415655339687.jpg"
-                    />
-                    <Post onPressForComment={() => navigation.navigate("Comments")} onPressForBlogDetail={openBlogDetail}
-                        title="The 15 Secrets You Will Never Know About Iphone."
-                        pic="https://cdn.vox-cdn.com/thumbor/OCYUEEc5odYKWErorN0WNvLa9po=/0x0:2032x1355/1200x800/filters:focal(854x516:1178x840)/cdn.vox-cdn.com/uploads/chorus_image/image/70617253/akrales_210917_4760_0175.0.jpg"
-                    />
-                </View>
+                        </View>
+                    )
+                })
+
+                }
 
             </ScrollView >
         </>

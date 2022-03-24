@@ -1,18 +1,37 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
-import { getAuth, signOut } from "firebase/auth";
+// import { getAuth, signOut } from "firebase/auth";
 import blogPic from '../../assets/facebookLogo.png'
 import { vh, vw } from '../../constants'
+import firebase from 'firebase'
+
 
 const Profile = ({ navigation }) => {
-    const auth = getAuth()
+    // const auth = getAuth()
+    const [userDetails, setuserDetails] = useState({})
     const logoutUser = () => {
-        signOut(auth).then(() => {
-
-        }).catch((error) => {
-            alert("something went wrong")
-        });
+        firebase.auth().signOut()
     }
+
+    useEffect(() => {
+        getUserDetils()
+    }, [])
+
+    const getUserDetils = () => {
+
+        let id = firebase.auth().currentUser.uid;
+        firebase.database().ref(`users/${id}`)
+            .on("value", snapshot => {
+                // console.log("snapshottttt",snapshot.val());
+                let data = snapshot.val() ? snapshot.val() : {}
+                // setuserDetails(snapshot.val())
+                setuserDetails(data)
+
+            })
+    }
+
+    console.log(userDetails, "UserDetailss");
+
     return (
         <View style={Styles.container}>
             <View style={{ marginTop: 20, flex: 0.20 }}>
@@ -32,13 +51,16 @@ const Profile = ({ navigation }) => {
             </View>
             <View style={{ justifyContent: "center", alignItems: "center", flex: 0.40 }}>
                 <View style={{ backgroundColor: "black", flex: 0.30, width: vw * 0.9, justifyContent: "center", alignItems: "center", borderRadius: 10, marginTop: vh * 0.05 }}>
-                    <Text style={{ color: "white", fontSize: 18 }}>Zain Ul Abdeen</Text>
+                    <Text style={{ color: "white", fontSize: 18 }}>
+                        {userDetails.name}
+                        {/* Text */}
+                    </Text>
                 </View>
                 <View style={{ backgroundColor: "black", flex: 0.30, width: vw * 0.9, justifyContent: "center", alignItems: "center", borderRadius: 10, marginTop: vh * 0.02 }}>
-                    <Text style={{ color: "white", fontSize: 18 }}>zain1@gmail.com</Text>
-                </View>
-                <View style={{ backgroundColor: "black", flex: 0.30, width: vw * 0.9, justifyContent: "center", alignItems: "center", borderRadius: 10, marginTop: vh * 0.02 }}>
-                    <Text style={{ color: "white", fontSize: 18 }}>123456</Text>
+                    <Text style={{ color: "white", fontSize: 18 }}>
+                        {userDetails.email}
+                        {/* Text */}
+                    </Text>
                 </View>
             </View>
             <TouchableOpacity style={{ flex: 0.10, justifyContent: "center", alignItems: "center" }}

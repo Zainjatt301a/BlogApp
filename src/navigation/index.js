@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+// import { getAuth, onAuthStateChanged } from "firebase/auth";
 import AuthStack from './AuthStack';
 import AppStack from './AppStack';
 import { ActivityIndicator, Image } from 'react-native';
 import { headerColor, vh, vw } from '../constants';
 import { View } from 'react-native';
+import firebase from 'firebase';
 
 export default function Navigation() {
     const [component, setComponent] =
@@ -19,12 +20,12 @@ export default function Navigation() {
             // </View>
         )
 
-    const auth = getAuth();
+    // const auth = getAuth();
     useEffect(() => {
         setTimeout(() => {
-            onAuthStateChanged(auth, (user) => {
+            firebase.auth().onAuthStateChanged(user => {
                 if (user) {
-                    const uid = user.uid;
+                    // const uid = user.uid;
                     setComponent(<AppStack />)
                 } else {
                     setComponent(<AuthStack />)

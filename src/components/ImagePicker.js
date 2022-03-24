@@ -3,7 +3,7 @@ import { Button, Image, View, Platform, StyleSheet } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { vh } from '../constants';
 
-export default function ImagePickers({ width, borderRadius, height, title, uploadImage }) {
+export default function ImagePickers({ width, borderRadius, height, title, picImage }) {
     const [image, setImage] = useState(null);
 
     const pickImage = async () => {
@@ -19,7 +19,9 @@ export default function ImagePickers({ width, borderRadius, height, title, uploa
 
         if (!result.cancelled) {
             setImage(result.uri);
-            await uploadImage(result.uri)
+            picImage(result)
+            // await uploadImage(result.uri)
+
         }
     };
 

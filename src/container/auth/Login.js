@@ -9,9 +9,12 @@ import { EvilIcons } from '@expo/vector-icons';
 import { vh } from "../../constants";
 import * as Facebook from 'expo-facebook';
 import { FacebookAuthProvider, signInWithCredential } from "firebase/auth"
+import firebase from "firebase";
+import axios from "axios";
 
 const Login = ({ navigation }) => {
 
+    const [loginResult, setLoginResult] = useState({})
 
     const Provider = FacebookAuthProvider
     const facebookLogIn = async () => {
@@ -33,8 +36,28 @@ const Login = ({ navigation }) => {
     }
 
     const signinUser = async () => {
-        await loginUser(inputs.userName, inputs.password)
+        // await loginUser(inputs.userName, inputs.password)
+        firebase.auth().signInWithEmailAndPassword(inputs.userName, inputs.password)
+            .then(response => {
+                // setLoading(false)
+                console.log("Login Responseeee", response);
+            })
+            .catch(error => {
+                // setLoading(false)
+                console.log("ERRRRROR", error);
+            })
     }
+
+    // const pushLoginData = () => {
+    //     let id = loginResult.data.id
+    //     firebase.database().ref(`users/${id}`)
+    //         .set({
+    //             name: loginResult.data.name,
+    //             email: loginResult.data.email,
+    //             // image: res.data.data.url,
+    //             isActive: true,
+    //         })
+    // }
 
     let AppId = "652483592482813"
     let permissions = ['public_profile', 'email']
@@ -47,15 +70,50 @@ const Login = ({ navigation }) => {
             });
 
             let result = await Facebook.logInWithReadPermissionsAsync({ permissions })
-            let response = FacebookAuthProvider.credential(result.token)
+            const res = await axios.get('https://graph.facebook.com/v2.5/me?fields=picture.width(720).height(720),email,name,friends&access_token=' + result.token)
+                .then(res => {
+                    // setLoginResult(res.data)
+                    console.log("FAcebook success", res.data);
+                    // console.log(id, "IDDDDDD");
+                    firebase.database().ref(`users/${res.data.id}`)
+                        .set({
+                            name: res.data.name,
+                            email: res.data.email,
+                            image: res.data.picture.data.url,
+                            isActive: true,
+                        }).then((res) => {
+                            console.log("user record success");
+
+                            // console.log(res, "RSSPONSEEEEEEE");
+                        }).catch((err) => {
+                            // console.log(err, "ERRRRRRRRRRR");
+                        })
+                    // console.log(res.data, "RESSSS")
+
+                })
+                .catch(err => {
+                    console.log(err, "ERR");
+                })
+            // console.log(result, "Result");
+
+            // await res.json().name
+
+            // console.log(res, "Res");
+            let response = firebase.auth.FacebookAuthProvider.credential(result.token)
+
+            // console.log(response, "Ressssssssss");
             try {
-                let rrrr = await signInWithCredential(response)
+
+                const result = firebase.auth().signInWithCredential(response)
+                // console.log(result, "resultFirebase");
+                return result
+
 
             } catch (error) {
                 console.log(error, "ERRRRRRRRRRRRRRR");
             }
 
-            console.log(result, response, "RRRRRRRRRRRRRRRRRR");
+            // console.log(result, response, "RRRRRRRRRRRRRRRRRR");
             //    .then(res => {
             //         if (res.type == "success") {
             //             console.log(res.token, "TTT");
@@ -75,6 +133,10 @@ const Login = ({ navigation }) => {
             console.log(err, "errrr");
         }
     }
+
+    // console.log(loginResult, "Login Result");
+
+
     return (
 
         <View style={Style.container}>
