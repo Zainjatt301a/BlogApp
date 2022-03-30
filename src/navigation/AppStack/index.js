@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { Home, Profile, BlogDetail, Comments, CreateBlog, Favorite } from '../../container';
+import { Home, Profile, BlogDetail, Comments, CreateBlog, Favorite, MyBlogs } from '../../container';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { AntDesign, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { headerColor } from '../../constants';
@@ -78,7 +78,7 @@ function AppStack() {
 
     const ProfileStacks = () => {
         return (
-            <Stack.Navigator>
+            <Stack.Navigator initialRouteName='Profile'>
                 <Stack.Screen
                     name="Profile"
                     component={Profile}
@@ -93,9 +93,9 @@ function AppStack() {
                         }
                     }}
                 />
-                {/* <Stack.Screen
-                    name="Favorite"
-                    component={Favorite}
+                <Stack.Screen
+                    name="MyBlog"
+                    component={MyBlogs}
                     options={{
                         headerShown: true,
                         title: "Favorite",
@@ -106,13 +106,14 @@ function AppStack() {
                             color: "white"
                         }
                     }}
-                /> */}
+                />
             </Stack.Navigator>
         )
     }
     return (
 
         <Tab.Navigator
+
             initialRouteName='homeStacks'
             screenOptions={{
                 tabBarHideOnKeyboard: true,
@@ -125,8 +126,11 @@ function AppStack() {
                 options={{
                     headerShown: false,
                     tabBarIcon: () => { return < AntDesign name="home" size={24} color="black" /> },
-                    title: "Home"
+                    title: "Home",
+
                 }}
+
+
             />
 
             <Tab.Screen name="CreateBlog" component={CreateBlog}
@@ -153,8 +157,9 @@ function AppStack() {
                     },
                     headerTitleStyle: {
                         color: "white"
-                    }
+                    },
                 }}
+
             />
             <Tab.Screen name="profileStacks" component={ProfileStacks}
                 options={{

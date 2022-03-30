@@ -47,13 +47,13 @@ const Post = ({ onPressForComment, onPressForBlogDetail, title, pic, data, favAr
             return (
                 <AntDesign
                     onPress={unFavorite}
-                    name="heart" style={{ marginRight: vw * 0.02 }} size={24} color="red" />
+                    name="heart" style={{ marginHorizontal: 10, marginTop: 2 }} size={24} color="red" />
             )
         }
         else {
             return (
                 <TouchableOpacity onPress={favorite}>
-                    <AntDesign name="hearto" style={{ marginRight: vw * 0.02 }} color="black" size={24} />
+                    <AntDesign name="hearto" style={{ marginHorizontal: 10, marginTop: 2 }} color="black" size={24} />
                 </TouchableOpacity>
             )
         }
@@ -124,11 +124,11 @@ const Post = ({ onPressForComment, onPressForBlogDetail, title, pic, data, favAr
     }
 
     return (
-        <TouchableOpacity onPress={() => onPressForBlogDetail(data)} style={Styles.container}>
+        <View style={Styles.container}>
 
             <View style={{
-                flex: 0.10, flexDirection: "row", alignItems: "center", justifyContent: "flex-end",
-                marginHorizontal: 10, marginVertical: 20
+                flexDirection: "row", alignItems: "center", justifyContent: "flex-end",
+                marginHorizontal: 10, marginVertical: 10
             }}>
 
 
@@ -137,21 +137,25 @@ const Post = ({ onPressForComment, onPressForBlogDetail, title, pic, data, favAr
 
 
             </View>
-            <View style={{ flex: 0.30, marginHorizontal: 10 }}>
-                <Text style={{ fontSize: 18, fontWeight: "600" }}>{title}</Text>
+            <View style={{ flex: 0.20, marginHorizontal: 10 }}>
+                <Text style={{ fontSize: 15, fontWeight: "600" }}>{title}</Text>
             </View>
-            <View style={{ justifyContent: "center", flex: 1, alignItems: "center" }}>
-                <Image source={{ uri: pic }} style={{ flex: 1, justifyContent: "center", alignItems: "center", width: vw * 0.9 }} />
-            </View>
-            <View style={{ flex: 0.30, flexDirection: "row", justifyContent: "space-around", alignItems: "center" }}>
+            <TouchableOpacity
+                onPress={() => onPressForBlogDetail(data)}
+                style={{ justifyContent: "center", flex: 1, alignItems: "center", marginTop: vh * 0.01 }}>
+                <Image source={{ uri: pic }} style={{ justifyContent: "center", alignItems: "center", width: vw * 0.91, height: vh * 0.3 }} />
+            </TouchableOpacity>
+            <View style={{ flexDirection: "row", justifyContent: "space-around", alignItems: "center", height: vh * 0.06 }}>
                 {renderiIsLiked()}
-                <TouchableOpacity onPress={onPressForComment}>
+                <TouchableOpacity
+
+                    onPress={onPressForComment}>
                     <Text>Comment</Text>
                 </TouchableOpacity>
             </View>
 
 
-        </TouchableOpacity >
+        </View >
     )
 }
 
@@ -161,10 +165,11 @@ const Styles = StyleSheet.create({
         borderRadius: 10,
         marginHorizontal: 10,
         marginTop: vh * 0.03,
-        height: vh * 0.6,
-        elevation: 10,
-        width: vw * 0.95
-
+        // height: vh * 0.6,
+        // elevation: 5,
+        // width: vw * 0.95,
+        // borderWidth: 1
+        backgroundColor: "#E0E4EA"
     }
 })
 export default Post

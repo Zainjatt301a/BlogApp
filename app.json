@@ -6,7 +6,7 @@
     "orientation": "portrait",
     "icon": "",
     "splash": {
-      "image": "https://stackideas.cachefly.net/images/apps/2429/logo.png",
+      "image": "./src/assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -34,6 +34,9 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.tech.blog",
+      "versionCode": 1,
+      "softwareKeyboardLayoutMode": "pan",
       "adaptiveIcon": {
         "foregroundImage": "",
         "backgroundColor": "#FFFFFF"

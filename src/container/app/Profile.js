@@ -1,14 +1,32 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, Image, TouchableOpacity, Button } from 'react-native'
 // import { getAuth, signOut } from "firebase/auth";
 import blogPic from '../../assets/facebookLogo.png'
-import { vh, vw } from '../../constants'
+import { headerColor, vh, vw } from '../../constants'
 import firebase from 'firebase'
+import { TextInputs, ImagePickers } from "../../components";
 
 
 const Profile = ({ navigation }) => {
     // const auth = getAuth()
     const [userDetails, setuserDetails] = useState({})
+    const [image, setImageUrl] = useState("")
+
+
+    const [inputs, setInputs] = useState({
+        name: "",
+        image: "",
+        email: "",
+        image: ""
+    })
+
+    const onChangeHandler = (name, value) => {
+        setInputs({
+            ...inputs,
+            [name]: value
+        })
+    }
+
     const logoutUser = () => {
         firebase.auth().signOut()
     }
@@ -16,6 +34,7 @@ const Profile = ({ navigation }) => {
     useEffect(() => {
         getUserDetils()
     }, [])
+
 
     const getUserDetils = () => {
 
@@ -25,50 +44,112 @@ const Profile = ({ navigation }) => {
                 // console.log("snapshottttt",snapshot.val());
                 let data = snapshot.val() ? snapshot.val() : {}
                 // setuserDetails(snapshot.val())
-                setuserDetails(data)
-
+                setInputs(data)
             })
     }
 
-    console.log(userDetails, "UserDetailss");
+    console.log(inputs, "UserDetailss");
+
+    const updateProfile = () => {
+        // alert("update")
+        firebase.database().ref(`users/${firebase.auth().currentUser.uid}`).update({
+            ...inputs
+        })
+
+
+    }
+
+    const picImage = (images) => {
+        // console.log(images, "Image");
+        UploadImageToCloudinary(images)
+    }
+
+    const UploadImageToCloudinary = async (e) => {
+        console.log(e, "EEEEEE");
+        let apiUrl = 'https://api.cloudinary.com/v1_1/dqsji3tjw/image/upload';
+
+        let data = {
+            "file": e,
+            "upload_preset": "Images",
+        }
+
+        fetch(apiUrl, {
+            body: JSON.stringify(data),
+            headers: {
+                'content-type': 'application/json'
+            },
+            method: 'POST',
+        }).then(async r => {
+            let data = await r.json()
+            console.log(data.secure_url)
+            setInputs({ ...inputs, image: data.secure_url })
+            // return data.secure_url
+        }).catch(err => console.log(err))
+    }
+
+    console.log(inputs, "UNNNNNNNNNNNNNNNnn");
+
 
     return (
-        <View style={Styles.container}>
-            <View style={{ marginTop: 20, flex: 0.20 }}>
-                <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginHorizontal: 10 }}>
-                    <Text style={{ fontSize: 30 }}>
-                        Profile
-                    </Text>
-                    <TouchableOpacity
-                        onPress={logoutUser}
-                        style={{ backgroundColor: "black", padding: 10, borderRadius: 10 }}>
-                        <Text style={{ color: "white" }}>Log Out</Text>
-                    </TouchableOpacity>
+        <>
+            <View style={Styles.container}>
+                <View style={{ marginTop: 20, flex: 0.20 }}>
+                    <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginHorizontal: 10 }}>
+                        <Text style={{ fontSize: 30 }}>
+                            Profile
+                        </Text>
+                        <TouchableOpacity
+                            onPress={logoutUser}
+                            style={{ backgroundColor: "black", padding: 10, borderRadius: 10 }}>
+                            <Text style={{ color: "white" }}>Log Out</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={{ flex: 1 }}>
+                        <ImagePickers type="profile" picImage={picImage} val={inputs.image} width={100} height={100} borderRadius={100} title="Update Profile" />
+
+                    </View>
                 </View>
+                <View style={{ justifyContent: "center", alignItems: "center", flex: 0.42 }}>
+                    <View style={{ backgroundColor: "black", width: vw * 0.9, alignItems: "center", borderRadius: 10, justifyContent: "center", flex: 0.30 }}>
+                        {/* <Text style={{ color: "white", fontSize: 18 }}>
+                            {userDetails.name}
+                        </Text> */}
+                        <TextInputs
+                            color="white"
+                            placeholder="Name"
+                            value={inputs.name}
+                            onChangeText={(text) => onChangeHandler("name", text)}
+                            fontSize={18}
+                            marginTop={vh * 0.02}
+                        />
+                    </View>
+                    <View style={{ backgroundColor: "black", flex: 0.30, width: vw * 0.9, justifyContent: "center", alignItems: "center", borderRadius: 10, marginTop: vh * 0.02 }}>
+                        <Text style={{ color: "white", fontSize: 18 }}>
+                            {inputs.email}
+                            {/* Text */}
+                        </Text>
+                    </View>
+                </View>
+                <TouchableOpacity style={{ flex: 0.10, justifyContent: "center", alignItems: "center" }}
+                    onPress={() => navigation.navigate("MyBlog")}
+                >
+                    <Text style={{ fontSize: 16, fontWeight: "500" }}> My blogs</Text>
+                </TouchableOpacity>
+                {/* <TouchableOpacity style={{ flex: 0.10, justifyContent: "center", alignItems: "center" }}
+                    onPress={updateProfile}
+                >
+                    <Text style={{ fontSize: 16, fontWeight: "500" }}> Update</Text>
+                </TouchableOpacity> */}
                 <View style={{ justifyContent: "center", alignItems: "center" }}>
-                    <Image source={{ uri: "https://cdn5.vectorstock.com/i/1000x1000/50/29/user-icon-male-person-symbol-profile-avatar-vector-20715029.jpg" }} style={{ width: 100, height: 100, borderRadius: 100 }} />
+                    <Button title='Update Profile' color={headerColor} />
                 </View>
             </View>
-            <View style={{ justifyContent: "center", alignItems: "center", flex: 0.40 }}>
-                <View style={{ backgroundColor: "black", flex: 0.30, width: vw * 0.9, justifyContent: "center", alignItems: "center", borderRadius: 10, marginTop: vh * 0.05 }}>
-                    <Text style={{ color: "white", fontSize: 18 }}>
-                        {userDetails.name}
-                        {/* Text */}
-                    </Text>
-                </View>
-                <View style={{ backgroundColor: "black", flex: 0.30, width: vw * 0.9, justifyContent: "center", alignItems: "center", borderRadius: 10, marginTop: vh * 0.02 }}>
-                    <Text style={{ color: "white", fontSize: 18 }}>
-                        {userDetails.email}
-                        {/* Text */}
-                    </Text>
-                </View>
-            </View>
-            <TouchableOpacity style={{ flex: 0.10, justifyContent: "center", alignItems: "center" }}
-                onPress={() => navigation.navigate("Favorite")}
-            >
-                <Text style={{ fontSize: 16, fontWeight: "500" }}> Total favorite blogs : 2</Text>
-            </TouchableOpacity>
-        </View>
+
+
+
+
+        </>
+
     )
 }
 

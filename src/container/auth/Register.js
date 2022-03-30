@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { Text, View, StyleSheet, Image } from "react-native"
+import { Text, View, StyleSheet, Image, KeyboardAvoidingView, ScrollView } from "react-native"
 import { Button, TextInputs, ImagePickers } from "../../components";
 import facebookLogo from '../../assets/facebookLogo.png'
 // import { registerUser, uploadImageToStorage } from "../../services/Firebase";
-import { vh } from "../../constants";
+import { vh, headerColor } from "../../constants";
 import firebase from 'firebase';
 
 const Register = ({ navigation }) => {
@@ -12,6 +12,8 @@ const Register = ({ navigation }) => {
         email: "",
         password: ""
     })
+
+    const [imageUrl, setImageUrl] = useState("")
 
     // console.log(inputs.name, inputs.email, inputs.password, "States");
 
@@ -32,7 +34,8 @@ const Register = ({ navigation }) => {
                     .set({
                         name: inputs.name,
                         email: inputs.email,
-                        isActive: true
+                        isActive: true,
+                        image: imageUrl
                     })
                     .then(res => {
                         console.log("Responseeee", res);
@@ -46,22 +49,49 @@ const Register = ({ navigation }) => {
             })
     }
 
-    const uploadImage = async (image) => {
-        console.log(image, "Image");
-        const urls = await uploadImageToStorage(image)
-        console.log(urls, "Urls");
+    const picImage = (images) => {
+        // console.log(images, "Image");
+        UploadImageToCloudinary(images)
     }
+
+    const UploadImageToCloudinary = async (e) => {
+        console.log(e, "EEEEEE");
+        let apiUrl = 'https://api.cloudinary.com/v1_1/dqsji3tjw/image/upload';
+
+        let data = {
+            "file": e,
+            "upload_preset": "Images",
+        }
+
+        fetch(apiUrl, {
+            body: JSON.stringify(data),
+            headers: {
+                'content-type': 'application/json'
+            },
+            method: 'POST',
+        }).then(async r => {
+            let data = await r.json()
+            console.log(data.secure_url)
+            setImageUrl(data.secure_url)
+            // return data.secure_url
+        }).catch(err => console.log(err))
+    }
+
+    console.log(imageUrl, "Image Url");
     return (
 
-        <View style={Style.container}>
+        <ScrollView contentContainerStyle={Style.container}
+            keyboardShouldPersistTaps='handled'
+        >
+
             <View style={{ flex: 0.45, alignItems: "center" }}>
                 <Text style={{ fontSize: 30 }}>Welcome to Blog App</Text>
                 <Text style={{ fontSize: 20, marginTop: vh * 0.01, fontWeight: "300" }}>Please Register</Text>
 
-                <ImagePickers uploadImage={uploadImage} width={100} height={100} borderRadius={100} title="Upload Profile" />
+                <ImagePickers picImage={picImage} width={100} height={100} borderRadius={100} title="Upload Profile" />
 
             </View>
-            <View style={{ flex: 0.35 }}>
+            <View style={{ flex: 0.35, marginTop: vh * -0.06 }}>
                 <TextInputs
                     placeholder="Name"
                     value={inputs.name}
@@ -81,18 +111,19 @@ const Register = ({ navigation }) => {
             </View>
             <View style={{ flex: 0.33 }}>
                 <View style={{ marginTop: 20 }}>
-                    <Button onPress={signupUser} name="Sign Up" color="black" />
+                    <Button onPress={signupUser} name="Sign Up" color={headerColor} />
                 </View>
 
                 <Text onPress={() => navigation.navigate("login")} style={{ textDecorationLine: "underline", textAlign: "center", marginTop: vh * 0.03 }}>Already have an account ? Login</Text>
             </View>
-        </View >
+
+        </ScrollView >
     )
 }
 
 const Style = StyleSheet.create({
     container: {
-        flex: 1,
+        flexGrow: 1,
         marginTop: 20
     }
 })

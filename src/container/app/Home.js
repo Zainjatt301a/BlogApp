@@ -19,7 +19,7 @@ const Home = ({ navigation }) => {
     useEffect(() => {
         firebase.database().ref("blogs")
             .on("value", snapshot => {
-                let data = snapshot.val()
+                let data = snapshot.val() ? snapshot.val() : {}
 
                 // snapshot.forEach(innerVal => {
                 //     innerVal.forEach(more => {
@@ -76,7 +76,7 @@ const Home = ({ navigation }) => {
 
     console.log(blogsData, 'blogsData')
     let blogsKeys = Object.keys(blogsData)
-    console.log(blogsKeys, 'blogsKeys')
+    // console.log(blogsKeys, 'blogsKeys')
 
     return (
         <>
@@ -85,10 +85,10 @@ const Home = ({ navigation }) => {
             </View>
             <ScrollView style={Styles.container} >
 
-                {blogsKeys.map((val) => {
+                {blogsKeys?.map((val, index) => {
                     let items = blogsData[val]
                     return (
-                        < View >
+                        < View key={index} >
                             <Post
                                 favArray={favArray}
                                 likedArray={likedArray}
@@ -96,7 +96,7 @@ const Home = ({ navigation }) => {
                                 data={items}
                                 onPressForBlogDetail={openBlogDetail}
                                 title={items.title}
-                                pic="https://phantom-marca.unidadeditorial.es/7c4ccd41cb946352fe6e15a6c32773a1/crop/0x0/2041x1150/resize/1320/f/jpg/assets/multimedia/imagenes/2022/01/07/16415655339687.jpg"
+                                pic={items.image}
                                 description={items.description}
                                 firebaseKey={val}
                             />

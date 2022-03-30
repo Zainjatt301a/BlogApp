@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
-import { View, Text, StyleSheet, ScrollView } from 'react-native'
+import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native'
 import { ImagePickers, TextInputs, Button, RichTextEditor } from '../../components'
 import { vh } from '../../constants'
 import firebase from 'firebase'
+import { launchImageLibraryAsync } from 'expo-image-picker'
 // import { v4 as uuidv4 } from "uuid"
 import axios from 'axios'
 const CreateBlog = ({ navigation: { navigate } }) => {
@@ -10,6 +11,7 @@ const CreateBlog = ({ navigation: { navigate } }) => {
         title: "",
         description: ""
     })
+
 
     const onChangeHandler = (name, value) => {
         setInputs({
@@ -34,58 +36,49 @@ const CreateBlog = ({ navigation: { navigate } }) => {
                 description: inputs.description,
                 status: "active",
                 blogId: Math.floor(100000 + Math.random() * 900000),
-                createdBy: id
+                createdBy: id,
+                image: imageUrl
 
             })
             .then(response => {
+                setInputs({})
                 console.log("RESPONSEEEE", response);
             })
             .catch(err => {
                 console.log("errrrrrrr", err);
             })
     }
-    // declare all characters
-    const characters = 'ABCDEFH';
-
-    function generateString(length) {
-        let result = '';
-        const charactersLength = characters.length;
-        for (let i = 0; i < length; i++) {
-            result += characters.charAt(Math.floor(Math.random() * charactersLength));
-        }
-
-        return result;
-    }
-
-    console.log(generateString(5));
     const imagePickerGallery = (images) => {
-        // setImage(images)
-        const source = {
-            uri: images.uri,
-            type: images.type,
-            name: `${generateString(6)}.jpg`
-        }
-        console.log(source, "sourece variable");
-        UploadImageToCloudinary(source)
+
+        console.log(images, "Image");
+        UploadImageToCloudinary(images)
     }
 
     const UploadImageToCloudinary = async (e) => {
         console.log(e, "EEEEEE");
-        const data = new FormData()
-        data.append('file', e)
-        data.append("upload_preset", "Images")
-        data.append("cloud_name", "dqsji3tjw")
-        try {
-            let res = await axios.post(
-                "https://api.cloudinary.com/v1_1/dqsji3tjw/upload",
-                data)
-            // const URL=URL(response.data.secure_url)
-            console.log(res, "response");
-        } catch (error) {
-            console.log(error, "error cloudinary");
+        let apiUrl = 'https://api.cloudinary.com/v1_1/dqsji3tjw/image/upload';
+
+        let data = {
+            "file": e,
+            "upload_preset": "Images",
         }
+
+        fetch(apiUrl, {
+            body: JSON.stringify(data),
+            headers: {
+                'content-type': 'application/json'
+            },
+            method: 'POST',
+        }).then(async r => {
+            let data = await r.json()
+            console.log(data.secure_url)
+            setImageUrl(data.secure_url)
+            // return data.secure_url
+        }).catch(err => console.log(err))
     }
-    // console.log(image, "Image");
+
+
+    console.log(imageUrl, "Imageurl");
     return (
         <>
             <Text style={{ fontSize: 30, marginTop: vh * 0.03 }}>
@@ -94,6 +87,12 @@ const CreateBlog = ({ navigation: { navigate } }) => {
             <ScrollView contentContainerStyle={Styles.container}>
                 <View style={{ flex: 0.35 }}>
                     <ImagePickers picImage={imagePickerGallery} title="Upload Photo" width={300} height={100} borderRadius={10} />
+                    {/* <TouchableOpacity
+                        onPress={pickImage}
+                    >
+                        <Text>Upload Image</Text>
+                    </TouchableOpacity>
+                    <Image /> */}
                 </View>
                 <View style={{ flex: 0.20 }}>
                     <Text style={{ textAlign: "center" }}>Title</Text>
@@ -106,7 +105,10 @@ const CreateBlog = ({ navigation: { navigate } }) => {
                     <TextInputs
                         value={inputs.description}
                         onChangeText={(text) => onChangeHandler("description", text)}
-                        placeholder="Write Something" />
+                        placeholder="Write Something"
+                        height={vh * 0.2}
+                        borderWidth={1}
+                    />
                     {/* <RichTextEditor /> */}
                 </View>
                 <View style={{ flex: 0.12 }}>
@@ -119,7 +121,7 @@ const CreateBlog = ({ navigation: { navigate } }) => {
 
 const Styles = StyleSheet.create({
     container: {
-        flex: 1
+        flexGrow: 1
     }
 })
 

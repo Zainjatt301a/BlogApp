@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, StyleSheet, ActivityIndicator } from "react-native"
+import { Text, View, StyleSheet, ActivityIndicator, KeyboardAvoidingView, ScrollView, Image } from "react-native"
 import { Button, TextInputs } from "../../components";
 import facebookLogo from '../../assets/facebookLogo.png'
 import AppStack from "../../navigation/AppStack";
 import AuthStack from "../../navigation/AuthStack";
 import { loginUser } from "../../services/Firebase";
 import { EvilIcons } from '@expo/vector-icons';
-import { vh } from "../../constants";
+import { headerColor, vh, vw } from "../../constants";
 import * as Facebook from 'expo-facebook';
 import { FacebookAuthProvider, signInWithCredential } from "firebase/auth"
 import firebase from "firebase";
 import axios from "axios";
+import logo from '../../assets/logo.png'
 
 const Login = ({ navigation }) => {
 
@@ -67,7 +68,7 @@ const Login = ({ navigation }) => {
         // Facebook.logOutAsync()
         try {
             await Facebook.initializeAsync({
-                appId: AppId
+                appId: "497980541966155"
             });
 
             let result = await Facebook.logInWithReadPermissionsAsync({ permissions })
@@ -75,25 +76,15 @@ const Login = ({ navigation }) => {
                 .then(res => {
                     // setLoginResult(res.data)
                     console.log("FAcebook success", res.data);
+                    // setEmail(res.data.email)
+
                     // console.log(id, "IDDDDDD");
                     // let tempId = []
                     // let id = firebase.auth().currentUser?.uid
-                    id = res.data.id
+                    // id = res.data.id
                     // tempId.push(id, res.data.id)
                     // console.log(id, "Temp id");
-                    firebase.database().ref(`users/${id}`)
-                        .set({
-                            name: res.data.name,
-                            email: res.data.email,
-                            image: res.data.picture.data.url,
-                            isActive: true,
-                        }).then((res) => {
-                            console.log("user record success");
 
-                            // console.log(res, "RSSPONSEEEEEEE");
-                        }).catch((err) => {
-                            // console.log(err, "ERRRRRRRRRRR");
-                        })
                     // console.log(res.data, "RESSSS")
 
                 })
@@ -111,7 +102,24 @@ const Login = ({ navigation }) => {
             try {
 
                 const result = firebase.auth().signInWithCredential(response)
-                // console.log(result, "resultFirebase");
+                console.log(result, "resultFirebase");
+                result.then((res) => {
+                    console.log(res, "resResult");
+                    let id = res.user.uid
+                    firebase.database().ref(`users/${id}`)
+                        .set({
+                            name: res.additionalUserInfo.profile.name,
+                            email: res.additionalUserInfo.profile.email,
+                            image: res.additionalUserInfo.profile.picture.data.url,
+                            isActive: true,
+                        }).then((res) => {
+                            console.log("user record success");
+
+                            // console.log(res, "RSSPONSEEEEEEE");
+                        }).catch((err) => {
+                            // console.log(err, "ERRRRRRRRRRR");
+                        })
+                })
                 return result
 
 
@@ -145,10 +153,13 @@ const Login = ({ navigation }) => {
 
     return (
 
-        <View style={Style.container}>
+        <ScrollView contentContainerStyle={Style.container}
+            keyboardShouldPersistTaps='handled'
+        >
             <View style={{ flex: 0.12, alignItems: "center" }}>
+                <Image source={{ uri: "https://cdn.searchenginejournal.com/wp-content/uploads/2020/08/7-ways-a-blog-can-help-your-business-right-now-5f3c06b9eb24e-760x400.png" }} style={{ width: vw * 0.8, height: 200, resizeMode: "contain", borderRadius: 10 }} />
                 <Text style={{ fontSize: 30 }}>Welcome Back</Text>
-                <Text style={{ fontSize: 15, marginTop: vh * 0.01 }}>Please Sign In to Continue</Text>
+                <Text style={{ fontSize: 15, marginTop: vh * 0.02 }}>Please Sign In to Continue</Text>
             </View>
             <View style={{ flex: 0.22 }}>
                 <TextInputs
@@ -165,20 +176,21 @@ const Login = ({ navigation }) => {
             </View>
             <View style={{ flex: 0.33 }}>
                 <View style={{ marginTop: 20 }}>
-                    <Button onPress={signinUser} name="Sign in" color="black" />
+                    <Button onPress={signinUser} name="Sign in" color={headerColor} />
                 </View>
                 <View style={{ marginTop: 20 }}>
-                    <Button onPress={loginUserWithFb} pic={<EvilIcons name="sc-facebook" size={26} color="white" />} name="Continue with Facebook" color="#3b5998" />
+                    <Button onPress={loginUserWithFb} pic={<EvilIcons name="sc-facebook" size={26} color="white" />} name="Continue with Facebook" color="#2B6EDA" />
                 </View>
                 <Text onPress={() => navigation.navigate("register")} style={{ textDecorationLine: "underline", textAlign: "center", marginTop: 20 }}>Don't Have an account ?</Text>
             </View>
-        </View>
+        </ScrollView>
+
     )
 }
 
 const Style = StyleSheet.create({
     container: {
-        flex: 1,
+        flexGrow: 1,
         marginTop: 20
     }
 })

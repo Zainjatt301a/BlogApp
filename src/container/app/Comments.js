@@ -84,9 +84,9 @@ const Comments = ({ route }) => {
 
     // console.log(userDetails, "UserDetails")
     return (
-        <View style={{ flex: 1 }}>
-
-            <ScrollView style={Styles.container}>
+        // <View style={{ flex: 1 }}>
+        <>
+            <ScrollView contentContainerStyle={Styles.container} >
                 {
                     route.params.data.comment?.map((item, index) => {
                         console.log(item, "Itemsss");
@@ -94,35 +94,43 @@ const Comments = ({ route }) => {
                             <View style={{ marginTop: 20 }} key={index}>
                                 <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginHorizontal: 10 }}>
                                     <Image source={{ uri: item.profile }} style={{ width: 50, height: 50, borderRadius: 100 }} />
-                                    <Text>{item.time}</Text>
+                                    <Text>{item?.time}</Text>
                                 </View>
                                 <View style={{ marginLeft: 30, marginTop: 20 }}>
-                                    <Text>{item.comment}</Text>
+                                    <Text>{item?.comment}</Text>
                                 </View>
                             </View>
                         )
                     })
                 }
             </ScrollView>
-            <View style={Styles.commentView}>
-                <TextInput enablesReturnKeyAutomatically placeholder='Comment Now'
+            <KeyboardAvoidingView
+                behavior={'padding'}
+                // keyboardVerticalOffset={10}
+                // behavior='position' 
+                // contentContainerStyle={Styles.commentView}
+                style={Styles.commentView}
+            >
+                <TextInput placeholder='Comment Now'
                     value={commentText}
                     onChangeText={(text) => setCommentText(text)}
+                    style={{ textAlignVertical: "top" }}
                 />
                 <TouchableOpacity onPress={handleCommentSubmit}>
                     <Text>Post</Text>
                 </TouchableOpacity>
-            </View>
-
-        </View>
+            </KeyboardAvoidingView>
+        </>
+        // {/* </View> */ }
     )
 }
 
 const Styles = StyleSheet.create({
     container: {
-        flex: 1
+        flexGrow: 1
     },
     commentView: {
+        flexGrow: 0.01,
         flexDirection: "row",
         borderWidth: 1,
         justifyContent: "space-between",

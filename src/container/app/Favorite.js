@@ -4,36 +4,28 @@ import { AntDesign } from '@expo/vector-icons';
 import { vh, vw } from '../../constants';
 import firebase from 'firebase';
 
-const Favorite = () => {
+const Favorite = ({ navigation }) => {
     // const [isFavorite, setIsFavorite] = useState(false)
-    const [array, setArray] = useState([]);
+    const [array, setArray] = useState({});
 
     useEffect(() => {
-
-        let tempArray = [];
         let id = firebase.auth().currentUser.uid
         firebase.database().ref(`favourite/${id}`)
             .on("value", snapshot => {
-                console.log(snapshot.val(), "snapshottttt");
+                // console.log(snapshot.val(), "snapshottttt");
                 // tempArray.push(snapshot.val())
-                snapshot.forEach(innerVal => {
-                    tempArray.push(innerVal.val())
-                    // innerVal.forEach(more => {
-                    //     console.log(more.val(), "moreeeeee");
-                    //     tempArray.push(more.val())
-
-                    // })
-                    console.log(innerVal.val(), "innerVal");
-                })
-                console.log(tempArray, "tempArray");
-                setArray(tempArray)
+                let temp = snapshot.val() ? snapshot.val() : {}
+                // console.log(tempArray, "tempArray");
+                setArray(temp)
             })
     }, [])
 
-    // const favoritePost = () => {
-    //     // setIsFavorite(!isFavorite)
-    // }
-    console.log(array, "Favirote ARRAY");
+    const navigateToBlogDetail = (data, firebaseKey) => {
+        navigation.navigate("BlogDetail", { data, firebaseKey })
+    }
+
+    let keys = Object.keys(array)
+    console.log(keys, "keys");
     return (
         <>
             <View style={{ flex: 0.10, marginTop: vh * 0.02 }}>
@@ -41,16 +33,18 @@ const Favorite = () => {
             </View>
             <ScrollView style={Styles.container}>
                 {
-                    array.map((item) => {
+                    keys.map((item, index) => {
                         return (
-                            <TouchableOpacity style={{ borderRadius: 10, flexDirection: "row", borderWidth: 1, marginVertical: 20, alignItems: "center" }}>
+                            <TouchableOpacity
+                                onPress={() => navigateToBlogDetail(array[item], item)}
+                                key={index} style={{ borderRadius: 10, flexDirection: "row", borderWidth: 1, marginVertical: 20, alignItems: "center" }}>
                                 <View>
-                                    <Image source={{ uri: "https://phantom-marca.unidadeditorial.es/7c4ccd41cb946352fe6e15a6c32773a1/crop/0x0/2041x1150/resize/1320/f/jpg/assets/multimedia/imagenes/2022/01/07/16415655339687.jpg" }} style={{ width: vw * 0.4, height: 100, resizeMode: "cover" }} />
+                                    <Image source={{ uri: array[item].image }} style={{ width: vw * 0.4, height: 100, resizeMode: "cover" }} />
                                 </View>
                                 <View style={{ flex: 1, marginHorizontal: 5 }}>
 
                                     <View style={{ flex: 1 }}>
-                                        <Text style={{ fontSize: 18, fontWeight: "600" }}>{item.title}</Text>
+                                        <Text style={{ fontSize: 18, fontWeight: "600" }}>{array[item].title}</Text>
                                     </View>
 
                                 </View>
