@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text, StyleSheet, Image, ScrollView, TextInput, KeyboardAvoidingView, TouchableOpacity } from 'react-native'
 import firebase from 'firebase'
+import { vh } from '../../constants'
 
 const Comments = ({ route }) => {
     const [userDetails, setuserDetails] = useState({})
@@ -14,48 +15,7 @@ const Comments = ({ route }) => {
     // console.log(firebaseKey, data, 'route')
     // console.log(route.params.data.comment, "Route");
 
-    // const commentItems = [
-    //     {
-    //         profile: "https://cdn5.vectorstock.com/i/1000x1000/50/29/user-icon-male-person-symbol-profile-avatar-vector-20715029.jpg",
-    //         comment: "Very Nice",
-    //         time: new Date().toLocaleTimeString()
-    //     },
-    //     {
-    //         profile: "https://cdn5.vectorstock.com/i/1000x1000/50/29/user-icon-male-person-symbol-profile-avatar-vector-20715029.jpg",
-    //         comment: "Wow",
-    //         time: new Date().toLocaleTimeString()
-    //     },
-    //     {
-    //         profile: "https://cdn5.vectorstock.com/i/1000x1000/50/29/user-icon-male-person-symbol-profile-avatar-vector-20715029.jpg",
-    //         comment: "amazing",
-    //         time: new Date().toLocaleTimeString()
-    //     },
-    //     {
-    //         profile: "https://cdn5.vectorstock.com/i/1000x1000/50/29/user-icon-male-person-symbol-profile-avatar-vector-20715029.jpg",
-    //         comment: "test",
-    //         time: new Date().toLocaleTimeString()
-    //     },
-    //     {
-    //         profile: "https://cdn5.vectorstock.com/i/1000x1000/50/29/user-icon-male-person-symbol-profile-avatar-vector-20715029.jpg",
-    //         comment: "hello",
-    //         time: new Date().toLocaleTimeString()
-    //     },
-    //     {
-    //         profile: "https://cdn5.vectorstock.com/i/1000x1000/50/29/user-icon-male-person-symbol-profile-avatar-vector-20715029.jpg",
-    //         comment: "new",
-    //         time: new Date().toLocaleTimeString()
-    //     },
-    //     {
-    //         profile: "https://cdn5.vectorstock.com/i/1000x1000/50/29/user-icon-male-person-symbol-profile-avatar-vector-20715029.jpg",
-    //         comment: "Outstanding",
-    //         time: new Date().toLocaleTimeString()
-    //     },
-    //     {
-    //         profile: "https://cdn5.vectorstock.com/i/1000x1000/50/29/user-icon-male-person-symbol-profile-avatar-vector-20715029.jpg",
-    //         comment: "nice one",
-    //         time: new Date().toLocaleTimeString()
-    //     },
-    // ]
+
     useEffect(() => {
         getUserDetils()
     }, [])
@@ -73,37 +33,44 @@ const Comments = ({ route }) => {
     }
     const handleCommentSubmit = () => {
         let comments = data.comment || []
-        comments.push({ name: userDetails.name, email: userDetails.email, comment: commentText })
+        comments.push({ name: userDetails.name, email: userDetails.email, image: userDetails.image, comment: commentText })
         firebase.database().ref(`blogs/${firebaseKey}`).update({
             ...data,
             comment: comments
         }).then(res => {
+            setCommentText("")
             // console.log('Updated')
         })
     }
 
-    // console.log(userDetails, "UserDetails")
+    console.log(userDetails, "UserDetails")
     return (
-        // <View style={{ flex: 1 }}>
         <>
-            <ScrollView contentContainerStyle={Styles.container} >
-                {
-                    route.params.data.comment?.map((item, index) => {
-                        console.log(item, "Itemsss");
-                        return (
-                            <View style={{ marginTop: 20 }} key={index}>
-                                <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginHorizontal: 10 }}>
-                                    <Image source={{ uri: item.profile }} style={{ width: 50, height: 50, borderRadius: 100 }} />
-                                    <Text>{item?.time}</Text>
+            <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+
+                <ScrollView contentContainerStyle={Styles.container} >
+                    {
+                        route?.params?.data?.comment?.map((item, index) => {
+                            console.log(item, "Itemsss");
+                            return (
+                                <View style={{ marginVertical: 10 }} key={index}>
+                                    <View style={{ flexDirection: "row", alignItems: "center", marginHorizontal: 10 }}>
+                                        <Image source={{ uri: item?.image }} style={{ width: 50, height: 50, borderRadius: 100 }} />
+                                        <Text>{item?.time}</Text>
+                                    </View>
+                                    <View style={{ marginLeft: 30, marginTop: 20 }}>
+                                        <Text style={{ fontSize: 16 }}>{item?.comment}</Text>
+                                    </View>
                                 </View>
-                                <View style={{ marginLeft: 30, marginTop: 20 }}>
-                                    <Text>{item?.comment}</Text>
-                                </View>
-                            </View>
-                        )
-                    })
-                }
+                            )
+                        })
+                    }
+
+                </ScrollView>
+
+
             </ScrollView>
+
             <KeyboardAvoidingView
                 behavior={'padding'}
                 // keyboardVerticalOffset={10}
@@ -121,16 +88,16 @@ const Comments = ({ route }) => {
                 </TouchableOpacity>
             </KeyboardAvoidingView>
         </>
-        // {/* </View> */ }
     )
 }
 
 const Styles = StyleSheet.create({
     container: {
-        flexGrow: 1
+        flexGrow: 1,
+        // justifyContent: "space-between"
     },
     commentView: {
-        flexGrow: 0.01,
+        flexGrow: 0.04,
         flexDirection: "row",
         borderWidth: 1,
         justifyContent: "space-between",
@@ -138,7 +105,8 @@ const Styles = StyleSheet.create({
         borderColor: "#808080",
         borderRadius: 5,
         padding: 10,
-        marginTop: 10
+        // marginTop: 10,
+        // height: vh * 0.06
     }
 })
 

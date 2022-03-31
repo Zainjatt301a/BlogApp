@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, Image, TouchableOpacity, Button } from 'react-native'
+import { View, Text, StyleSheet, Image, TouchableOpacity, Button, ScrollView } from 'react-native'
 // import { getAuth, signOut } from "firebase/auth";
 import blogPic from '../../assets/facebookLogo.png'
 import { headerColor, vh, vw } from '../../constants'
@@ -48,7 +48,7 @@ const Profile = ({ navigation }) => {
             })
     }
 
-    console.log(inputs, "UserDetailss");
+    // console.log(inputs, "UserDetailss");
 
     const updateProfile = () => {
         // alert("update")
@@ -87,13 +87,13 @@ const Profile = ({ navigation }) => {
         }).catch(err => console.log(err))
     }
 
-    console.log(inputs, "UNNNNNNNNNNNNNNNnn");
+    // console.log(inputs, "UNNNNNNNNNNNNNNNnn");
 
 
     return (
         <>
-            <View style={Styles.container}>
-                <View style={{ marginTop: 20, flex: 0.20 }}>
+            <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={Styles.container} >
+                <View style={{ marginTop: 20, flex: 0.25 }}>
                     <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginHorizontal: 10 }}>
                         <Text style={{ fontSize: 30 }}>
                             Profile
@@ -109,15 +109,13 @@ const Profile = ({ navigation }) => {
 
                     </View>
                 </View>
-                <View style={{ justifyContent: "center", alignItems: "center", flex: 0.42 }}>
+                <View style={{ justifyContent: "center", alignItems: "center", flex: 0.55 }}>
                     <View style={{ backgroundColor: "black", width: vw * 0.9, alignItems: "center", borderRadius: 10, justifyContent: "center", flex: 0.30 }}>
-                        {/* <Text style={{ color: "white", fontSize: 18 }}>
-                            {userDetails.name}
-                        </Text> */}
+
                         <TextInputs
                             color="white"
                             placeholder="Name"
-                            value={inputs.name}
+                            value={inputs?.name}
                             onChangeText={(text) => onChangeHandler("name", text)}
                             fontSize={18}
                             marginTop={vh * 0.02}
@@ -125,25 +123,22 @@ const Profile = ({ navigation }) => {
                     </View>
                     <View style={{ backgroundColor: "black", flex: 0.30, width: vw * 0.9, justifyContent: "center", alignItems: "center", borderRadius: 10, marginTop: vh * 0.02 }}>
                         <Text style={{ color: "white", fontSize: 18 }}>
-                            {inputs.email}
+                            {inputs?.email}
                             {/* Text */}
                         </Text>
                     </View>
                 </View>
-                <TouchableOpacity style={{ flex: 0.10, justifyContent: "center", alignItems: "center" }}
-                    onPress={() => navigation.navigate("MyBlog")}
-                >
-                    <Text style={{ fontSize: 16, fontWeight: "500" }}> My blogs</Text>
-                </TouchableOpacity>
-                {/* <TouchableOpacity style={{ flex: 0.10, justifyContent: "center", alignItems: "center" }}
-                    onPress={updateProfile}
-                >
-                    <Text style={{ fontSize: 16, fontWeight: "500" }}> Update</Text>
-                </TouchableOpacity> */}
-                <View style={{ justifyContent: "center", alignItems: "center" }}>
-                    <Button title='Update Profile' color={headerColor} />
+                <View style={{ alignItems: "center" }}>
+                    <TouchableOpacity style={{ justifyContent: "center", alignItems: "center", backgroundColor: headerColor, padding: 7, width: vw * 0.3, borderRadius: 3 }}
+                        onPress={() => navigation.navigate("MyBlog")}
+                    >
+                        <Text style={{ fontSize: 18, fontWeight: "500", color: "white" }}> My blogs</Text>
+                    </TouchableOpacity>
                 </View>
-            </View>
+                <View style={{ justifyContent: "center", alignItems: "center", marginVertical: 10 }}>
+                    <Button onPress={updateProfile} title='Update Profile' color={headerColor} />
+                </View>
+            </ScrollView>
 
 
 

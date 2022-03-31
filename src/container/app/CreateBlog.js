@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native'
 import { ImagePickers, TextInputs, Button, RichTextEditor } from '../../components'
-import { vh } from '../../constants'
+import { headerColor, vh } from '../../constants'
 import firebase from 'firebase'
 import { launchImageLibraryAsync } from 'expo-image-picker'
 // import { v4 as uuidv4 } from "uuid"
@@ -11,7 +11,11 @@ const CreateBlog = ({ navigation: { navigate } }) => {
         title: "",
         description: ""
     })
+    const [userData, setUserData] = useState({})
 
+    useEffect(() => {
+        getUserData()
+    }, [])
 
     const onChangeHandler = (name, value) => {
         setInputs({
@@ -26,6 +30,17 @@ const CreateBlog = ({ navigation: { navigate } }) => {
 
     // console.log(title, description, image, "States");
 
+    const getUserData = () => {
+        let id = firebase.auth().currentUser.uid
+        firebase.database().ref(`users/${id}`)
+            .on("value", snapshote => {
+                // console.log(snapshote.val(), Image);
+                let data = snapshote.val() ? snapshote.val() : {}
+                setUserData(data)
+
+            })
+    }
+
     const postBlog = () => {
         // navigate("Home")
         let id = firebase.auth().currentUser.uid;
@@ -37,11 +52,14 @@ const CreateBlog = ({ navigation: { navigate } }) => {
                 status: "active",
                 blogId: Math.floor(100000 + Math.random() * 900000),
                 createdBy: id,
-                image: imageUrl
+                image: imageUrl,
+                userData,
+                date: new Date().toLocaleDateString()
 
             })
             .then(response => {
                 setInputs({})
+                setImageUrl("")
                 console.log("RESPONSEEEE", response);
             })
             .catch(err => {
@@ -77,6 +95,7 @@ const CreateBlog = ({ navigation: { navigate } }) => {
         }).catch(err => console.log(err))
     }
 
+    // console.log(userImage, 'userImage');
 
     console.log(imageUrl, "Imageurl");
     return (
@@ -84,9 +103,9 @@ const CreateBlog = ({ navigation: { navigate } }) => {
             <Text style={{ fontSize: 30, marginTop: vh * 0.03 }}>
                 Create Blog
             </Text>
-            <ScrollView contentContainerStyle={Styles.container}>
+            <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={Styles.container}>
                 <View style={{ flex: 0.35 }}>
-                    <ImagePickers picImage={imagePickerGallery} title="Upload Photo" width={300} height={100} borderRadius={10} />
+                    <ImagePickers type="create" pic={imageUrl} picImage={imagePickerGallery} title="Upload Photo" width={300} height={100} borderRadius={10} />
                     {/* <TouchableOpacity
                         onPress={pickImage}
                     >
@@ -112,7 +131,7 @@ const CreateBlog = ({ navigation: { navigate } }) => {
                     {/* <RichTextEditor /> */}
                 </View>
                 <View style={{ flex: 0.12 }}>
-                    <Button onPress={postBlog} name="Post" color="black" />
+                    <Button onPress={postBlog} name="Post" color={headerColor} />
                 </View>
             </ScrollView>
         </>

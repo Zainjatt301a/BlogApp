@@ -157,8 +157,8 @@ const Login = ({ navigation }) => {
             keyboardShouldPersistTaps='handled'
         >
             <View style={{ flex: 0.12, alignItems: "center" }}>
-                <Image source={{ uri: "https://cdn.searchenginejournal.com/wp-content/uploads/2020/08/7-ways-a-blog-can-help-your-business-right-now-5f3c06b9eb24e-760x400.png" }} style={{ width: vw * 0.8, height: 200, resizeMode: "contain", borderRadius: 10 }} />
-                <Text style={{ fontSize: 30 }}>Welcome Back</Text>
+                <Image source={{ uri: "https://cdn.searchenginejournal.com/wp-content/uploads/2020/08/7-ways-a-blog-can-help-your-business-right-now-5f3c06b9eb24e-760x400.png" }} style={{ width: vw * 0.8, height: 150, borderRadius: 10 }} />
+                <Text style={{ fontSize: 30, marginTop: vh * 0.02 }}>Welcome Back</Text>
                 <Text style={{ fontSize: 15, marginTop: vh * 0.02 }}>Please Sign In to Continue</Text>
             </View>
             <View style={{ flex: 0.22 }}>

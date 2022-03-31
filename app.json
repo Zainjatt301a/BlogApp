@@ -2,9 +2,9 @@
   "expo": {
     "name": "blog",
     "slug": "blog",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "orientation": "portrait",
-    "icon": "",
+    "icon": "./src/assets/splash.png",
     "splash": {
       "image": "./src/assets/splash.png",
       "resizeMode": "contain",
@@ -35,15 +35,15 @@
     },
     "android": {
       "package": "com.tech.blog",
-      "versionCode": 1,
+      "versionCode": 3,
       "softwareKeyboardLayoutMode": "pan",
       "adaptiveIcon": {
-        "foregroundImage": "",
+        "foregroundImage": "./src/assets/splash.png",
         "backgroundColor": "#FFFFFF"
       }
     },
     "web": {
-      "favicon": ""
+      "favicon": "./src/assets/splash.png"
     }
   }
 }

@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Button, Image, View, Platform, StyleSheet, TouchableOpacity } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { vh, headerColor } from '../constants';
+import { AntDesign } from '@expo/vector-icons';
 
 
-export default function ImagePickers({ width, borderRadius, height, title, picImage, type, val }) {
+export default function ImagePickers({ width, borderRadius, height, title, picImage, type, val, pic, value }) {
     const [image, setImage] = useState(null);
 
 
@@ -30,37 +31,107 @@ export default function ImagePickers({ width, borderRadius, height, title, picIm
         }
     };
 
-    const renderProfileIcon = () => {
-        if (image) {
-            return (
-                <Image source={{ uri: image }} style={{ ...Styles.ImageProps, width: width, borderRadius: borderRadius, height: height }} />
-            )
-        }
-        else {
+    // console.log(value, "Val");
+    // const renderSomething = () => {
+    //     if (value === "") {
+    //         return (
+    //             <Image
+    //                 source={{ uri: "https://cdn5.vectorstock.com/i/1000x1000/50/29/user-icon-male-person-symbol-profile-avatar-vector-20715029.jpg" }}
+    //                 style={{ ...Styles.ImageProps, width: width, borderRadius: borderRadius, height: height }} />
+    //         )
+    //     }
+    // }
+
+    const renderPlaceholder = () => {
+        if (type === "register") {
             return (
                 <Image
-                    source={{ uri: "https://phantom-marca.unidadeditorial.es/7c4ccd41cb946352fe6e15a6c32773a1/crop/0x0/2041x1150/resize/1320/f/jpg/assets/multimedia/imagenes/2022/01/07/16415655339687.jpg" }}
+                    source={{ uri: "https://cdn5.vectorstock.com/i/1000x1000/50/29/user-icon-male-person-symbol-profile-avatar-vector-20715029.jpg" }}
+
+                    style={{ ...Styles.ImageProps, width: width, borderRadius: borderRadius, height: height }} />
+            )
+
+        } else {
+            return (
+                <Image
+
+                    source={{ uri: "https://ssd-conf.org/wp-content/uploads/2016/06/blog-thumb-placeholder.jpg" }}
 
                     style={{ ...Styles.ImageProps, width: width, borderRadius: borderRadius, height: height }} />
             )
         }
     }
 
-    return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            {
-                type !== "profile" && < Button title={title} onPress={pickImage} color={headerColor} />
-            }
+    const renderSomething = () => {
+        if (value) {
+            return (
+                <Image source={{ uri: value }} style={{ ...Styles.ImageProps, width: width, borderRadius: borderRadius, height: height }} />
+            )
+        } else {
+            return (
+                <Image source={{ uri: "https://cdn5.vectorstock.com/i/1000x1000/50/29/user-icon-male-person-symbol-profile-avatar-vector-20715029.jpg" }} style={{ ...Styles.ImageProps, width: width, borderRadius: borderRadius, height: height }} />
+            )
+        }
+    }
 
-            {type === "profile" ?
-                <TouchableOpacity onPress={pickImage}>
-                    <Image source={{ uri: val }} style={{ ...Styles.ImageProps, width: width, borderRadius: borderRadius, height: height }} />
-                </TouchableOpacity>
-                :
-                renderProfileIcon()
-            }
-        </View>
-    );
+    const imageUrl = () => {
+        if (pic) {
+            return (
+                <Image source={{ uri: pic }} style={{ ...Styles.ImageProps, width: width, borderRadius: borderRadius, height: height }} />
+            )
+        } else {
+            return (
+                <Image source={{ uri: "https://ssd-conf.org/wp-content/uploads/2016/06/blog-thumb-placeholder.jpg" }} style={{ ...Styles.ImageProps, width: width, borderRadius: borderRadius, height: height }} />
+            )
+        }
+    }
+
+
+    const renderProfileIcon = () => {
+        if (image) {
+            return (
+                // checkImage()
+                type === "create" ? imageUrl() : renderSomething()
+            )
+        }
+        else {
+            return renderPlaceholder()
+        }
+    }
+
+    return (
+        type === "create" ?
+            < View
+                style={type === "register" ? Styles.mainView : Styles.mainViewCreateBlog
+                }>
+                {
+                    type !== "profile" && <AntDesign name="clouduploado" style={{ marginLeft: 5 }} size={25} color="black" onPress={pickImage} />
+                }
+                {type === "profile" ?
+                    <TouchableOpacity onPress={pickImage}>
+                        <Image source={{ uri: val }} style={{ ...Styles.ImageProps, width: width, borderRadius: borderRadius, height: height }} />
+                    </TouchableOpacity>
+                    :
+                    renderProfileIcon()
+                }
+
+            </View >
+            :
+            < View
+                style={type === "register" ? Styles.mainView : Styles.mainViewCreateBlog
+                }>
+                {type === "profile" ?
+                    <TouchableOpacity onPress={pickImage}>
+                        <Image source={{ uri: val }} style={{ ...Styles.ImageProps, width: width, borderRadius: borderRadius, height: height }} />
+                    </TouchableOpacity>
+                    :
+                    renderProfileIcon()
+                }
+                {
+                    type !== "profile" && <AntDesign name="clouduploado" style={{ marginLeft: 5 }} size={25} color="black" onPress={pickImage} />
+                }
+            </View >
+    )
 }
 
 const Styles = StyleSheet.create({
@@ -69,5 +140,16 @@ const Styles = StyleSheet.create({
         height: 70,
         borderRadius: 100,
         marginVertical: 10
+    },
+    mainView: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: "row"
+    },
+    mainViewCreateBlog: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center'
     }
 })

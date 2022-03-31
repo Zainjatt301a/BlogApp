@@ -4,6 +4,7 @@ import { Home, Profile, BlogDetail, Comments, CreateBlog, Favorite, MyBlogs } fr
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { AntDesign, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { headerColor } from '../../constants';
+import { Button } from 'react-native';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -11,7 +12,13 @@ const Tab = createBottomTabNavigator();
 function AppStack() {
     const HomeStacks = () => {
         return (
-            <Stack.Navigator initialRouteName='Home'>
+            <Stack.Navigator
+                screenOptions={{
+                    headerBackTitleStyle: {
+                        color: "white"
+                    }
+                }}
+                initialRouteName='Home'>
                 <Stack.Screen
                     name="Home"
                     component={Home}
@@ -38,7 +45,8 @@ function AppStack() {
                         },
                         headerTitleStyle: {
                             color: "white"
-                        }
+                        },
+                        headerTintColor: "white"
                     }}
                 />
                 <Stack.Screen
@@ -52,26 +60,10 @@ function AppStack() {
                         },
                         headerTitleStyle: {
                             color: "white"
-                        }
+                        },
+                        headerTintColor: "white"
                     }}
                 />
-                {/* <Stack.Screen
-
-                    name="CreateBlog"
-                    component={CreateBlog}
-                    options={{
-                        headerShown: true,
-                        title: "Create Blog",
-                        headerStyle: {
-                            backgroundColor: headerColor,
-                        },
-                        headerTitleStyle: {
-                            color: "white"
-                        }
-                    }}
-
-                /> */}
-
             </Stack.Navigator>
         )
     }
@@ -98,13 +90,14 @@ function AppStack() {
                     component={MyBlogs}
                     options={{
                         headerShown: true,
-                        title: "Favorite",
+                        title: "My Blog",
                         headerStyle: {
                             backgroundColor: headerColor,
                         },
                         headerTitleStyle: {
                             color: "white"
-                        }
+                        },
+                        headerTintColor: "white"
                     }}
                 />
             </Stack.Navigator>
@@ -125,9 +118,8 @@ function AppStack() {
             <Tab.Screen name="homeStacks" component={HomeStacks}
                 options={{
                     headerShown: false,
-                    tabBarIcon: () => { return < AntDesign name="home" size={24} color="black" /> },
-                    title: "Home",
-
+                    tabBarIcon: ({ focused }) => { return < AntDesign name="home" size={24} color={focused ? "white" : "black"} /> },
+                    title: "Home"
                 }}
 
 
@@ -135,7 +127,7 @@ function AppStack() {
 
             <Tab.Screen name="CreateBlog" component={CreateBlog}
                 options={{
-                    tabBarIcon: () => { return <Ionicons name="create-outline" size={24} color="black" /> },
+                    tabBarIcon: ({ focused }) => { return <Ionicons name="create-outline" size={24} color={focused ? "white" : "black"} /> },
                     title: "Create Blog",
                     headerShown: true,
                     headerStyle: {
@@ -149,7 +141,7 @@ function AppStack() {
 
             <Tab.Screen name="Favorite" component={Favorite}
                 options={{
-                    tabBarIcon: () => { return <MaterialIcons name="favorite-border" size={24} color="black" /> },
+                    tabBarIcon: ({ focused }) => { return <MaterialIcons name="favorite-border" size={24} color={focused ? "white" : "black"} /> },
                     title: "Favorite",
                     headerShown: true,
                     headerStyle: {
@@ -163,7 +155,7 @@ function AppStack() {
             />
             <Tab.Screen name="profileStacks" component={ProfileStacks}
                 options={{
-                    tabBarIcon: () => { return < AntDesign name="profile" size={24} color="black" /> },
+                    tabBarIcon: ({ focused }) => { return < AntDesign name="profile" size={24} color={focused ? "white" : "black"} /> },
                     title: "Profile",
                     headerShown: false
                 }}

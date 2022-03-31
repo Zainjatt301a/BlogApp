@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, ImageBackground } from 'react-native'
 import { AntDesign } from '@expo/vector-icons';
-import { vh, vw } from '../constants';
+import { headerColor, vh, vw } from '../constants';
 import firebase from 'firebase';
 
 
-const Post = ({ onPressForComment, onPressForBlogDetail, title, pic, data, favArray, likedArray, firebaseKey }) => {
+const Post = ({ onPressForComment, onPressForBlogDetail, title, pic, data, favArray, likedArray, firebaseKey, AuthorProfile, date }) => {
     const [isLiked, setIsLiked] = useState(false)
     const [isFavorite, setIsFavorite] = useState(false)
 
@@ -26,7 +26,7 @@ const Post = ({ onPressForComment, onPressForBlogDetail, title, pic, data, favAr
         const find = Data.find(item => favArray[item].blogId == data.blogId)
         firebase.database().ref(`favourite/${firebase.auth().currentUser.uid}/${find}`).remove()
             .then(res => {
-                alert("removed")
+                // alert("removed")
             })
     }
 
@@ -35,7 +35,7 @@ const Post = ({ onPressForComment, onPressForBlogDetail, title, pic, data, favAr
         const find = DataForLike.find(item => likedArray[item].blogId == data.blogId)
         firebase.database().ref(`Likes/${firebase.auth().currentUser.uid}/${find}`).remove()
             .then(res => {
-                alert("removed")
+                // alert("removed")
             })
     }
 
@@ -63,14 +63,18 @@ const Post = ({ onPressForComment, onPressForBlogDetail, title, pic, data, favAr
         const find = DataForLike.find(item => likedArray[item].blogId == data.blogId)
         if (find) {
             return (
-                <TouchableOpacity onPress={unLiked}>
-                    <Text style={{ color: "blue" }}>Liked ({data?.likes?.length})</Text>
+                <TouchableOpacity
+                    style={{}}
+                    onPress={unLiked}>
+                    <Text style={{ color: "blue", fontWeight: "800", fontSize: 16 }}>Liked ({data?.likes?.length})</Text>
                 </TouchableOpacity>
             )
         } else {
             return (
-                <TouchableOpacity onPress={Likes}>
-                    <Text style={{ color: "black" }}>Like ({data?.likes?.length})</Text>
+                <TouchableOpacity
+                    style={{}}
+                    onPress={Likes}>
+                    <Text style={{ color: "black", fontWeight: "600", fontSize: 15 }}>Like ({data?.likes?.length})</Text>
                 </TouchableOpacity>
             )
         }
@@ -98,7 +102,7 @@ const Post = ({ onPressForComment, onPressForBlogDetail, title, pic, data, favAr
                 ...data,
             })
             .then((res) => {
-                alert("done")
+                // alert("done")
             })
             .catch((err) => {
 
@@ -115,7 +119,7 @@ const Post = ({ onPressForComment, onPressForBlogDetail, title, pic, data, favAr
                 ...data,
             })
             .then((res) => {
-                alert("done")
+                // alert("done")
             })
             .catch((err) => {
 
@@ -127,30 +131,48 @@ const Post = ({ onPressForComment, onPressForBlogDetail, title, pic, data, favAr
         <View style={Styles.container}>
 
             <View style={{
-                flexDirection: "row", alignItems: "center", justifyContent: "flex-end",
-                marginHorizontal: 10, marginVertical: 10
+                flexDirection: "row", alignItems: "center",
+                marginHorizontal: 10, marginTop: vh * 0.03, justifyContent: "space-between"
             }}>
-
-
+                {
+                    AuthorProfile ? <Image source={{ uri: AuthorProfile }} style={{ width: 50, height: 50, borderRadius: 50 }} />
+                        :
+                        <Image source={{ uri: "https://cdn5.vectorstock.com/i/1000x1000/50/29/user-icon-male-person-symbol-profile-avatar-vector-20715029.jpg" }} style={{ width: 50, height: 50, borderRadius: 50 }} />
+                }
 
                 {renderIsFav()}
 
 
             </View>
-            <View style={{ flex: 0.20, marginHorizontal: 10 }}>
-                <Text style={{ fontSize: 15, fontWeight: "600" }}>{title}</Text>
+            <View style={{
+                flexDirection: "row", alignItems: "center",
+                marginHorizontal: 10, marginVertical: 10
+            }}>
+                <Text style={{ color: "black", fontSize: 16 }}>Posted Date: <Text style={{ fontSize: 14 }}> {date}</Text></Text>
             </View>
+
+            {/* <View style={{
+                flexDirection: "row", alignItems: "center", justifyContent: "flex-end",
+                marginHorizontal: 10, marginVertical: 10
+            }}>
+                {renderIsFav()}
+            </View> */}
             <TouchableOpacity
+                onPress={() => onPressForBlogDetail(data)}
+                style={{ flex: 0.20, marginHorizontal: 10 }}>
+                <Text style={{ fontSize: 18, fontWeight: "900", lineHeight: 25, color: "black" }}>{title}</Text>
+            </TouchableOpacity>
+            {/* <TouchableOpacity
                 onPress={() => onPressForBlogDetail(data)}
                 style={{ justifyContent: "center", flex: 1, alignItems: "center", marginTop: vh * 0.01 }}>
                 <Image source={{ uri: pic }} style={{ justifyContent: "center", alignItems: "center", width: vw * 0.91, height: vh * 0.3 }} />
-            </TouchableOpacity>
-            <View style={{ flexDirection: "row", justifyContent: "space-around", alignItems: "center", height: vh * 0.06 }}>
+            </TouchableOpacity> */}
+            <View style={{ flexDirection: "row", justifyContent: "space-around", alignItems: "center", marginTop: vh * 0.01, elevation: 1 }}>
                 {renderiIsLiked()}
                 <TouchableOpacity
-
+                    style={{ marginVertical: 10 }}
                     onPress={onPressForComment}>
-                    <Text>Comment</Text>
+                    <Text style={{ color: "black", fontWeight: "800", fontSize: 16 }}>Comment</Text>
                 </TouchableOpacity>
             </View>
 
@@ -166,7 +188,7 @@ const Styles = StyleSheet.create({
         marginHorizontal: 10,
         marginTop: vh * 0.03,
         // height: vh * 0.6,
-        // elevation: 5,
+        elevation: 5,
         // width: vw * 0.95,
         // borderWidth: 1
         backgroundColor: "#E0E4EA"

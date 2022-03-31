@@ -97,6 +97,8 @@ const Home = ({ navigation }) => {
                                 onPressForBlogDetail={openBlogDetail}
                                 title={items.title}
                                 pic={items.image}
+                                AuthorProfile={items?.userData?.image}
+                                date={items?.date}
                                 description={items.description}
                                 firebaseKey={val}
                             />
@@ -114,7 +116,8 @@ const Home = ({ navigation }) => {
 
 const Styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
+        marginVertical: 10
     }
 })
 export default Home

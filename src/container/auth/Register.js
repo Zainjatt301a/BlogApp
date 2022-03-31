@@ -40,7 +40,7 @@ const Register = ({ navigation }) => {
                     .then(res => {
                         console.log("Responseeee", res);
                     })
-                alert("Succesful")
+                // alert("Succesful")
                 console.log("Responseeee", response);
             })
             .catch(err => {
@@ -88,7 +88,7 @@ const Register = ({ navigation }) => {
                 <Text style={{ fontSize: 30 }}>Welcome to Blog App</Text>
                 <Text style={{ fontSize: 20, marginTop: vh * 0.01, fontWeight: "300" }}>Please Register</Text>
 
-                <ImagePickers picImage={picImage} width={100} height={100} borderRadius={100} title="Upload Profile" />
+                <ImagePickers type="register" value={imageUrl} picImage={picImage} width={100} height={100} borderRadius={100} title="Upload Profile" />
 
             </View>
             <View style={{ flex: 0.35, marginTop: vh * -0.06 }}>

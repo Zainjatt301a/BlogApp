@@ -18,7 +18,7 @@ const MyBlogs = ({ navigation }) => {
         firebase.database().ref(`blogs`)
             .on("value", snapshot => {
                 // console.log(snapshot.val(), "Snapshot");
-                let data = snapshot.val()
+                let data = snapshot.val() ? snapshot.val() : {}
                 setUserBlog(data)
 
             })
@@ -36,7 +36,7 @@ const MyBlogs = ({ navigation }) => {
             <View style={{ flex: 0.10, marginTop: vh * 0.02 }}>
                 <Text style={{ fontSize: 30 }}> My Blogs</Text>
             </View>
-            <ScrollView style={Styles.container}>
+            {/* <ScrollView style={Styles.container}>
                 {
                     keys.map((item, index) => {
                         let id = firebase.auth().currentUser.uid
@@ -62,7 +62,47 @@ const MyBlogs = ({ navigation }) => {
                 }
 
 
+            </ScrollView > */}
+            <ScrollView style={Styles.container} >
+                {
+                    keys.map((item, index) => {
+                        let id = firebase.auth().currentUser.uid
+                        if (userBlogs[item].createdBy === id) {
+                            return (
+                                <ScrollView style={{ flexGrow: 1, marginVertical: 10, borderRadius: 10, backgroundColor: "#E0E4EA", paddingVertical: 10 }} key={index} >
+                                    <View style={{
+                                        flexDirection: "row", alignItems: "center",
+                                        marginHorizontal: 10, marginTop: vh * 0.03, justifyContent: "space-between"
+                                    }}>
+                                        {
+                                            userBlogs[item]?.userData?.image ? <Image source={{ uri: userBlogs[item]?.userData?.image }} style={{ width: 50, height: 50, borderRadius: 50 }} />
+                                                :
+                                                <Image source={{ uri: "https://cdn5.vectorstock.com/i/1000x1000/50/29/user-icon-male-person-symbol-profile-avatar-vector-20715029.jpg" }} style={{ width: 50, height: 50, borderRadius: 50 }} />
+                                        }
+                                    </View>
+                                    <View style={{
+                                        flexDirection: "row", alignItems: "center",
+                                        marginHorizontal: 10, marginVertical: 10
+                                    }}>
+                                        <Text style={{ color: "black", fontSize: 16 }}>Posted Date: <Text style={{ fontSize: 14 }}> {userBlogs[item]?.date}</Text></Text>
+                                    </View>
+
+
+                                    <TouchableOpacity
+                                        onPress={() => naviateToBlogDetail(userBlogs[item], item)}
+                                        style={{ marginHorizontal: 10 }}>
+                                        <Text style={{ fontSize: 18, fontWeight: "900", lineHeight: 25, color: "black" }}>{userBlogs[item].title}</Text>
+                                    </TouchableOpacity>
+
+                                </ScrollView>
+                            )
+                        }
+                    })
+                }
+
+
             </ScrollView >
+
         </>
     )
 }

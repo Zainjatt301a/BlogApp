@@ -35,7 +35,8 @@ function AuthStack() {
                     },
                     headerTitleStyle: {
                         color: "white"
-                    }
+                    },
+                    headerTintColor: "white"
                 }}
             />
         </Stack.Navigator>

@@ -31,7 +31,7 @@ const TextInputs = ({ placeholder, value, onChangeText, secureTextEntry, height,
 const Styles = StyleSheet.create({
     container: {
         borderColor: headerColor,
-        borderBottomWidth: 0.7,
+        borderBottomWidth: 1,
         padding: 5,
         marginHorizontal: 20,
         marginTop: vh * 0.03,
